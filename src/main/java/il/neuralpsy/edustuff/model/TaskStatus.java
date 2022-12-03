@@ -12,9 +12,10 @@ import org.hibernate.validator.constraints.UniqueElements;
 @Setter
 @Getter
 @Entity
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = "name")})
 public class TaskStatus {
     @Id
     private Integer taskStatusId;
-    @Column(unique = true)
     private String name;
 }

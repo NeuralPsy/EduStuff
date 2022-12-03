@@ -11,6 +11,8 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = "name")})
 public class Subject {
     @Id
     private Integer subjectId;
