@@ -1,6 +1,6 @@
 package il.neuralpsy.edustuff.service;
 
-import il.neuralpsy.edustuff.exception.UserEmailDoesntExistInDB;
+import il.neuralpsy.edustuff.exception.UserEmailDoesntExistException;
 import il.neuralpsy.edustuff.model.User;
 import il.neuralpsy.edustuff.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class UserService {
 
     public Optional<User> findUserByEmail(String email) {
         boolean isValid = userRepository.existsByEmail(email);
-        if (!isValid) throw new UserEmailDoesntExistInDB("There is no user with email "+email+" or you did a typo");
+        if (!isValid) throw new UserEmailDoesntExistException("There is no user with email "+email+" or you did a typo");
         return userRepository.findUserByEmail(email);
     }
 
