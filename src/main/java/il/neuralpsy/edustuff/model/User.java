@@ -31,10 +31,11 @@ public class User{
     @JoinColumn(referencedColumnName = "userTypeId")
     private UserType userType;
     private LocalDate birthdate;
-    @OneToMany(mappedBy = "user")
+    @OneToMany
+    @JoinColumn(referencedColumnName = "userId")
     private List<Task> tasks = new ArrayList<>();
     @OneToMany
-    @PrimaryKeyJoinColumn
+    @JoinColumn(referencedColumnName = "userId")
     private List<Subject> subjects = new ArrayList<>();
 
 }

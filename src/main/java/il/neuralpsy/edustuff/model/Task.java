@@ -18,7 +18,7 @@ public class Task {
     @GeneratedValue
     private Integer taskId;
     @ManyToOne
-    @JoinColumn(name="user_id", nullable=false)
+    @JoinColumn(name="tasks")
     private User user;
     private String name;
     private LocalDateTime startTime;
