@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.UniqueElements;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -19,7 +22,7 @@ import java.util.*;
 @Entity
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = "email")})
-public class User{
+public class User implements UserDetails {
     @Id
     @GeneratedValue
     private Integer userId;
@@ -27,6 +30,9 @@ public class User{
     @Email
     @NotEmpty(message = "Email should not be empty")
     private String email;
+    private String password;
+    private Boolean locked;
+    private Boolean enabled;
     @OneToOne
     @JoinColumn(referencedColumnName = "userTypeId")
     private UserType userType;
@@ -34,20 +40,40 @@ public class User{
     @OneToMany(mappedBy = "user")
     private Set<Task> tasks;
     @OneToMany(mappedBy = "user", orphanRemoval = true)
-//    @JoinColumn(referencedColumnName = "user")
-    private List<Subject> subjects;
+    private Set<Subject> subjects;
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    private Set<Comment> comments;
 
-    public void addTask(Task task){
-        tasks.add(task);
-        task.setUser(this);
 
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userType.getName());
+        return Collections.singleton(authority);
     }
 
-    public void removeTask(Task task){
-        tasks.remove(task);
-        task.setUser(null);
+    @Override
+    public String getUsername() {
+        return email;
     }
 
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
+    @Override
+    public boolean isAccountNonLocked() {
+        return !locked;
+    }
 
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
 }
