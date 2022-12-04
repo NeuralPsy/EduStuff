@@ -1,9 +1,8 @@
 package il.neuralpsy.edustuff.controller;
 
 import il.neuralpsy.edustuff.dto.UserDto;
-import il.neuralpsy.edustuff.model.User;
 import il.neuralpsy.edustuff.service.UserService;
-import org.modelmapper.ModelMapper;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,33 +14,30 @@ import java.util.stream.Collectors;
 public class UserController {
     private final UserService service;
 
-    private final ModelMapper modelMapper;
 
     @Autowired
-    public UserController(UserService service, ModelMapper modelMapper){
-        this.modelMapper = modelMapper;
+    public UserController(UserService service){
         this.service = service;
     }
 
     @PostMapping
-    public UserDto addUser(@RequestBody UserDto userDto){
-        User user = modelMapper.map(userDto, User.class);
-        return modelMapper.map(service.addUser(user), UserDto.class);
+    public UserDto addUser(@RequestBody @Valid UserDto userDto){
+        return service.addUser(userDto);
     }
 
     @GetMapping("/{userId}")
     public UserDto getUserById(@PathVariable Integer userId){
-        return modelMapper.map(service.getUserById(userId).get(), UserDto.class);
+        return service.getUserById(userId);
     }
 
     @GetMapping("/email")
     public UserDto findUserByEmail(@RequestParam String email){
-        return modelMapper.map(service.findUserByEmail(email), UserDto.class);
+        return service.findUserByEmail(email);
     }
 
     @PutMapping
     public boolean updateUser(@RequestBody UserDto userDto){
-        return service.updateUser(modelMapper.map(userDto, User.class));
+        return service.updateUser(userDto);
     }
 
     @DeleteMapping("/{userId}")
@@ -51,12 +47,11 @@ public class UserController {
 
     @GetMapping
     public Collection<UserDto> getAll(){
-        return service.gelAll().stream().map(user -> modelMapper.map(user, UserDto.class)).collect(Collectors.toList());
+        return service.getAll();
     }
 
     @GetMapping("/userType/{userTypeId}")
     public Collection<UserDto> getAllByUserType(@PathVariable Integer userTypeId){
-        return service.getAllByUserType(userTypeId).stream().map(user -> modelMapper.map(user, UserDto.class))
-                .collect(Collectors.toList());
+        return service.getAllByUserType(userTypeId);
     }
 }

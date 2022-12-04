@@ -16,40 +16,36 @@ import java.util.stream.Collectors;
 public class TaskController {
 
     private final TaskService taskService;
-    private final ModelMapper modelMapper;
 
     @Autowired
-    public TaskController(TaskService taskService, ModelMapper modelMapper){
+    public TaskController(TaskService taskService){
         this.taskService = taskService;
-        this.modelMapper = modelMapper;
     }
 
     @PostMapping
     public TaskDto addTask(@RequestBody Task task){
-        return modelMapper.map(taskService.addTask(task), TaskDto.class);
+        return taskService.addTask(task);
     }
 
 
     @GetMapping
     public Collection<TaskDto> getAll(){
-        return taskService.getAll().stream().map(task -> modelMapper.map(task, TaskDto.class))
-                .collect(Collectors.toList());
+        return taskService.getAll();
     }
 
     @GetMapping("/{taskId}")
     public TaskDto getTaskById(@PathVariable Integer taskId){
-        return modelMapper.map(taskService.getTaskById(taskId).get(), TaskDto.class);
+        return taskService.getTaskById(taskId);
     }
 
     @GetMapping("/user/{userId}")
     public Collection<TaskDto> getTasksByUserId(@PathVariable Integer userId){
-        return taskService.getTasksByUserId(userId).stream().map(task -> modelMapper.map(task, TaskDto.class))
-                .collect(Collectors.toList());
+        return taskService.getTasksByUserId(userId);
     }
 
     @PutMapping
     public boolean updateTask(@RequestBody TaskDto taskDto){
-        return taskService.updateTask(modelMapper.map(taskDto, Task.class));
+        return taskService.updateTask(taskDto);
     }
 
     @DeleteMapping("/{taskId}")

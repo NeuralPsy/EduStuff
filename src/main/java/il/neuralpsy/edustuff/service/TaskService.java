@@ -1,12 +1,15 @@
 package il.neuralpsy.edustuff.service;
 
+import il.neuralpsy.edustuff.dto.TaskDto;
 import il.neuralpsy.edustuff.exception.TaskDoesntExistException;
 import il.neuralpsy.edustuff.exception.UserDoesntExistException;
 import il.neuralpsy.edustuff.model.Task;
 import il.neuralpsy.edustuff.model.User;
 import il.neuralpsy.edustuff.repository.TaskRepository;
 import il.neuralpsy.edustuff.repository.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
@@ -14,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class TaskService {
@@ -21,32 +25,44 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
 
+    private final ModelMapper modelMapper;
+
     @Autowired
-    public TaskService(TaskRepository taskRepository, UserRepository userRepository){
+    public TaskService(TaskRepository taskRepository, UserRepository userRepository, ModelMapper modelMapper){
         this.taskRepository = taskRepository;
         this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
     }
 
 
-    public Task addTask(Task task){
-        return taskRepository.save(task);
+    public TaskDto addTask(Task task){
+        return modelMapper.map(taskRepository.save(task), TaskDto.class);
     }
 
-    public Collection<Task> getAll() {
-        return taskRepository.findAll();
+    public Collection<TaskDto> getAll() {
+        return taskRepository.findAll().stream().map(task -> modelMapper.map(task, TaskDto.class))
+                .collect(Collectors.toList());
     }
 
-    public Optional<Task> getTaskById(Integer taskId) {
-        return taskRepository.findById(taskId);
+    public TaskDto getTaskById(Integer taskId) {
+        TaskDto taskDto;
+        try {
+            taskDto = modelMapper.map(taskRepository.findById(taskId), TaskDto.class);
+        } catch (EmptyResultDataAccessException e){
+            throw new TaskDoesntExistException("There's no task with ID "+taskId);
+        }
+        return taskDto;
     }
 
-    public Collection<Task> getTasksByUserId(Integer userId) {
+    public Collection<TaskDto> getTasksByUserId(Integer userId) {
         boolean isValid = userRepository.existsById(userId);
         if (!isValid) throw new UserDoesntExistException("There's no user with ID "+userId);
-        return taskRepository.findTasksByUser_UserId(userId);
+        return taskRepository.findTasksByUser_UserId(userId).stream().map(task -> modelMapper.map(task, TaskDto.class))
+                .collect(Collectors.toList());
     }
 
-    public boolean updateTask(Task task) {
+    public boolean updateTask(TaskDto taskDto) {
+        Task task = modelMapper.map(taskDto, Task.class);
         taskRepository.updateTaskStatus(task.getTaskStatus(), task.getTaskId());
         return true;
     }

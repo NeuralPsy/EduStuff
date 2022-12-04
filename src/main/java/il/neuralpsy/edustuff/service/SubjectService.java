@@ -6,6 +6,7 @@ import il.neuralpsy.edustuff.model.Subject;
 import il.neuralpsy.edustuff.model.User;
 import il.neuralpsy.edustuff.repository.SubjectRepository;
 import il.neuralpsy.edustuff.repository.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class SubjectService {
@@ -21,22 +23,27 @@ public class SubjectService {
 
     private final UserRepository userRepository;
 
+    private final ModelMapper modelMapper;
+
     @Autowired
-    public SubjectService(SubjectRepository subjectRepository, UserRepository userRepository) {
+    public SubjectService(SubjectRepository subjectRepository, UserRepository userRepository, ModelMapper modelMapper) {
         this.subjectRepository = subjectRepository;
         this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
     }
 
-    public Collection<Subject> getAll() {
-        return subjectRepository.findAll();
+    public Collection<SubjectDto> getAll() {
+        return subjectRepository.findAll().stream().map(subject -> modelMapper.map(subject, SubjectDto.class))
+                .collect(Collectors.toList());
     }
 
-    public Optional<Subject> getSubjectById(Integer subjectId) {
-        return subjectRepository.findById(subjectId);
+    public SubjectDto getSubjectById(Integer subjectId) {
+        return modelMapper.map(subjectRepository.findById(subjectId).get(), SubjectDto.class);
     }
 
-    public Subject addSubject(Subject subject) {
-        return subjectRepository.save(subject);
+    public SubjectDto addSubject(SubjectDto subjectDto) {
+        Subject subject = modelMapper.map(subjectDto, Subject.class);
+        return modelMapper.map(subjectRepository.save(subject), SubjectDto.class);
     }
 
     public boolean addSubjectToUser(Integer subjectId, Integer userId) {
@@ -45,8 +52,9 @@ public class SubjectService {
         return true;
     }
 
-    public Collection<Subject> getSubjectsByUserId(Integer userId) {
-        return subjectRepository.findSubjectsByUserUserId(userId);
+    public Collection<SubjectDto> getSubjectsByUserId(Integer userId) {
+        return subjectRepository.findSubjectsByUserUserId(userId).stream().map(subject -> modelMapper.map(subject,
+                SubjectDto.class)).collect(Collectors.toList());
     }
 
     public boolean removeSubject(Integer subjectId) {
