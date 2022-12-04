@@ -1,11 +1,14 @@
 package il.neuralpsy.edustuff;
 
+import il.neuralpsy.edustuff.model.Subject;
 import il.neuralpsy.edustuff.model.TaskStatus;
 import il.neuralpsy.edustuff.model.User;
 import il.neuralpsy.edustuff.model.UserType;
+import il.neuralpsy.edustuff.repository.SubjectRepository;
 import il.neuralpsy.edustuff.repository.TaskStatusRepository;
 import il.neuralpsy.edustuff.repository.UserRepository;
 import il.neuralpsy.edustuff.repository.UserTypeRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -21,7 +24,7 @@ public class EdustuffApplication {
 		}
 
 	@Bean
-	public CommandLineRunner loadData(UserTypeRepository repository) {
+	public CommandLineRunner loadUserTypes(UserTypeRepository repository) {
 		return (args) -> {
 			// save a couple of customers
 			repository.save(new UserType(1, "STUDENT"));
@@ -32,7 +35,7 @@ public class EdustuffApplication {
 	}
 
 	@Bean
-	public CommandLineRunner loadData(TaskStatusRepository repository) {
+	public CommandLineRunner loadTaskStatus(TaskStatusRepository repository) {
 		return (args) -> {
 			// save a couple of customers
 			repository.save(new TaskStatus(1, "IN_PROGRESS"));
@@ -42,6 +45,23 @@ public class EdustuffApplication {
 
 
 	}
+
+	@Bean
+	public CommandLineRunner loadSubjects(SubjectRepository repository) {
+		return (args) -> {
+			// save a couple of customers
+			repository.save(new Subject(1, "HISTORY"));
+			repository.save(new Subject(2, "MATH"));
+			repository.save(new Subject(3, "BIOLOGY"));
+		};
+
+
+	}
+	@Bean
+	public ModelMapper modelMapper() {
+		return new ModelMapper();
+	}
+
 
 
 }

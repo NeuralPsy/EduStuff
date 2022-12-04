@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -17,12 +18,17 @@ public class Task {
     @Id
     @GeneratedValue
     private Integer taskId;
-    @ManyToOne
-    @JoinColumn(name="tasks")
-    private User user;
     private String name;
-    private LocalDateTime startTime;
     @OneToOne
-    @PrimaryKeyJoinColumn
+    @JoinColumn(referencedColumnName = "subjectId")
+    private Subject subject;
+    @ManyToOne
+    @JoinColumn(name = "userId", referencedColumnName = "userId")
+    private User user;
+    private Timestamp startTime;
+    @OneToOne
+    @JoinColumn(referencedColumnName = "taskStatusId")
     private TaskStatus taskStatus;
+
+
 }

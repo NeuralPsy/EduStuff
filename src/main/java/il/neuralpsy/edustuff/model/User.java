@@ -31,11 +31,23 @@ public class User{
     @JoinColumn(referencedColumnName = "userTypeId")
     private UserType userType;
     private LocalDate birthdate;
-    @OneToMany
-    @JoinColumn(referencedColumnName = "userId")
-    private List<Task> tasks = new ArrayList<>();
-    @OneToMany
-    @JoinColumn(referencedColumnName = "userId")
-    private List<Subject> subjects = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private Set<Task> tasks;
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+//    @JoinColumn(referencedColumnName = "user")
+    private List<Subject> subjects;
+
+    public void addTask(Task task){
+        tasks.add(task);
+        task.setUser(this);
+
+    }
+
+    public void removeTask(Task task){
+        tasks.remove(task);
+        task.setUser(null);
+    }
+
+
 
 }

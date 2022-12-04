@@ -1,5 +1,6 @@
 package il.neuralpsy.edustuff.service;
 
+import il.neuralpsy.edustuff.dto.UserDto;
 import il.neuralpsy.edustuff.exception.UserEmailDoesntExistException;
 import il.neuralpsy.edustuff.model.User;
 import il.neuralpsy.edustuff.repository.UserRepository;
@@ -45,5 +46,9 @@ public class UserService {
 
     public Collection<User> gelAll() {
         return userRepository.findAll();
+    }
+
+    public Collection<User> getAllByUserType(Integer userTypeId) {
+        return userRepository.findAllByUserType_UserTypeId(userTypeId);
     }
 }
