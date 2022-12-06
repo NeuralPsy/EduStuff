@@ -5,8 +5,10 @@ import il.neuralpsy.edustuff.exception.UserDoesntExistException;
 import il.neuralpsy.edustuff.exception.UserEmailDoesntExistException;
 import il.neuralpsy.edustuff.model.User;
 import il.neuralpsy.edustuff.repository.UserRepository;
+import il.neuralpsy.edustuff.repository.UserTypeRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -18,22 +20,30 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private PasswordEncoder passwordEncoder;
+    private UserTypeRepository userTypeRepository;
+
     private final ModelMapper modelMapper;
 
     @Autowired
-    public UserService(UserRepository userRepository, ModelMapper modelMapper){
+    public UserService(UserRepository userRepository, ModelMapper modelMapper,
+                       PasswordEncoder passwordEncoder, UserTypeRepository userTypeRepository){
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
+        this.passwordEncoder = passwordEncoder;
+        this.userTypeRepository = userTypeRepository;
+
     }
 
     public UserDto addUser(UserDto userDto) {
         User user = modelMapper.map(userDto, User.class);
-        return modelMapper.map(userRepository.save(user), UserDto.class);
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        return mapUserToDto(userRepository.save(user));
     }
 
     public UserDto getUserById(Integer userId) {
         try {
-            return modelMapper.map(userRepository.findById(userId).get(), UserDto.class);
+            return mapUserToDto(userRepository.findById(userId).get());
         } catch (NoSuchElementException e){
             throw new UserDoesntExistException("There is no user with ID "+userId);
         }
@@ -42,7 +52,7 @@ public class UserService {
     public UserDto findUserByEmail(String email) {
         boolean doesExist = userRepository.existsByEmail(email);
         if (!doesExist) throw new UserEmailDoesntExistException("There is no user with email "+email+" or a typo was done");
-        return modelMapper.map(userRepository.findUserByEmail(email).get(), UserDto.class);
+        return mapUserToDto(userRepository.findUserByEmail(email).get());
     }
 
     public boolean updateUser(UserDto userDto) {
@@ -56,12 +66,23 @@ public class UserService {
     }
 
     public Collection<UserDto> getAll() {
-        return userRepository.findAll().stream().map(user -> modelMapper.map(user, UserDto.class))
+        return userRepository.findAll().stream().map(user -> mapUserToDto(user))
                 .collect(Collectors.toList());
     }
 
     public Collection<UserDto> getAllByUserType(Integer userTypeId) {
-        return userRepository.findAllByUserType_UserTypeId(userTypeId).stream().map(user -> modelMapper.map(user, UserDto.class))
+        return userRepository.findAllByUserType_UserTypeId(userTypeId).stream().map(user -> mapUserToDto(user))
                 .collect(Collectors.toList());
+    }
+
+    private UserDto mapUserToDto(User user){
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userDto.getUserId());
+        userDto.setUserType(user.getUserType());
+        userDto.setName(user.getName());
+        userDto.setEmail(user.getEmail());
+        userDto.setBirthdate(user.getBirthdate());
+
+        return userDto;
     }
 }
