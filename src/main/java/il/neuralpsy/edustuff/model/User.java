@@ -1,5 +1,6 @@
 package il.neuralpsy.edustuff.model;
 
+import il.neuralpsy.edustuff.event.OnFeedEvent;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -40,6 +41,8 @@ public class User {
     private Set<Subject> subjects;
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private Set<Comment> comments;
+    @OneToMany(mappedBy = "user")
+    private Set<OnFeedEvent> events;
 
 
 

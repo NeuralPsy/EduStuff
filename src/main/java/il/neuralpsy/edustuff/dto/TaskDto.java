@@ -13,4 +13,5 @@ public class TaskDto {
     private Subject subject;
     private Timestamp startTime;
     private TaskStatus taskStatus;
+
 }

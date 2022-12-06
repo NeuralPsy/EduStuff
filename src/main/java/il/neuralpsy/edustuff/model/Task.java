@@ -33,5 +33,4 @@ public class Task {
     @OneToMany(mappedBy = "task")
     private Set<Comment> comments;
 
-
 }
