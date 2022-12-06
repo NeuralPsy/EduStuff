@@ -2,6 +2,7 @@ package il.neuralpsy.edustuff.controller;
 
 import il.neuralpsy.edustuff.dto.FeedEventDto;
 import il.neuralpsy.edustuff.dto.UserDto;
+import il.neuralpsy.edustuff.event.FeedEvent;
 import il.neuralpsy.edustuff.service.FeedService;
 import il.neuralpsy.edustuff.service.UserService;
 import jakarta.validation.Valid;

@@ -20,7 +20,6 @@ public class FeedService {
 
     private final UserRepository userRepository;
     private final FeedRepository feedRepository;
-
     private final ModelMapper modelMapper;
 
     @Autowired
@@ -38,19 +37,8 @@ public class FeedService {
     }
 
     @EventListener
-    public void handleOnFeedEvent(OnFeedEvent event) {
-        Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
-
-        User user = userRepository.findById(event.getUserId()).get();
-        EventType eventType = event.getFeedDetails().getType();
-        AllowedFeedEvents details = event.getFeedDetails();
-
-        FeedEvent feedEvent = new FeedEvent();
-        feedEvent.setEventType(eventType);
-        feedEvent.setUser(user);
-        feedEvent.setTimestamp(timestamp);
-        feedEvent.setFeedDetails(details);
-
-        feedRepository.save(feedEvent);
+    public void handleOnFeedEvent(FeedEvent event) {
+        feedRepository.save(event);
     }
+
 }
