@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,6 +30,8 @@ public class Task {
     @OneToOne
     @JoinColumn(referencedColumnName = "taskStatusId")
     private TaskStatus taskStatus;
+    @OneToMany(mappedBy = "task")
+    private Set<Comment> comments;
 
 
 }

@@ -22,7 +22,6 @@ public class UserDto {
     @Email
     private String email;
     private UserType userType;
-
     private LocalDate birthdate;
 
 }

@@ -3,12 +3,10 @@ package il.neuralpsy.edustuff.controller;
 import il.neuralpsy.edustuff.dto.CommentDto;
 import il.neuralpsy.edustuff.model.Comment;
 import il.neuralpsy.edustuff.service.CommentService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/comment")
@@ -39,5 +37,15 @@ public class CommentController {
     @PutMapping
     public boolean updateComment(@RequestBody CommentDto commentDto){
         return commentService.updateComment(commentDto);
+    }
+
+    @GetMapping("/task/{taskId}")
+    public Collection<CommentDto> getCommentsByTaskId(@PathVariable Integer taskId){
+        return commentService.getCommentsByTaskId(taskId);
+    }
+
+    @GetMapping("/user/{userId}")
+    public Collection<CommentDto> getCommentsByUserId(@PathVariable Integer userId){
+        return commentService.getCommentsByUserId(userId);
     }
 }

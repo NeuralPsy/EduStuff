@@ -11,7 +11,7 @@ public class CommentDto {
     @Id
     @GeneratedValue
     private Integer commentId;
-    private User user;
+    private UserDto user;
     private String text;
     private Timestamp timestamp;
 }

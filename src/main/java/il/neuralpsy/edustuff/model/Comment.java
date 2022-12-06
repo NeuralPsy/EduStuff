@@ -21,9 +21,11 @@ public class Comment implements Comparable<Comment>{
     @ManyToOne
     @JoinColumn(name = "comments")
     private User user;
+   @ManyToOne
+   @JoinColumn(name = "tasks")
+    private Task task;
     private String text;
     private Timestamp timestamp;
-    private boolean isEdited;
 
     @Override
     public int compareTo(Comment o) {
