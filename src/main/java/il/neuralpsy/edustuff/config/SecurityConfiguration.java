@@ -24,6 +24,13 @@ public class SecurityConfiguration {
                 .requestMatchers("/register/**").permitAll()
                 .requestMatchers("/index").permitAll()
                 .requestMatchers("/users").hasRole("TEACHER")
+                .requestMatchers("/teacher").hasRole("TEACHER")
+                .requestMatchers("/student").hasRole("STUDENT")
+                .requestMatchers("/user/**").authenticated()
+                .requestMatchers("/task/**").authenticated()
+                .requestMatchers("/subject/**").authenticated()
+                .requestMatchers("/comment/**").authenticated()
+                .requestMatchers("/user/userType/1").hasRole("TEACHER")
                 .and()
                 .formLogin(
                         form -> form

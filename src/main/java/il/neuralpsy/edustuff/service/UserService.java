@@ -1,21 +1,27 @@
 package il.neuralpsy.edustuff.service;
 
 import il.neuralpsy.edustuff.dto.UserDto;
+import il.neuralpsy.edustuff.dto.UserRegistrationDto;
 import il.neuralpsy.edustuff.exception.UserDoesntExistException;
 import il.neuralpsy.edustuff.exception.UserEmailDoesntExistException;
 import il.neuralpsy.edustuff.model.User;
+import il.neuralpsy.edustuff.model.UserType;
 import il.neuralpsy.edustuff.repository.UserRepository;
 import il.neuralpsy.edustuff.repository.UserTypeRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
@@ -35,9 +41,22 @@ public class UserService {
 
     }
 
-    public UserDto addUser(UserDto userDto) {
-        User user = modelMapper.map(userDto, User.class);
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+    public UserDto addUser(UserRegistrationDto userRegistrationDto) {
+        log.info("Adding new user");
+        User user = new User();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate birthdate = LocalDate.parse(userRegistrationDto.getBirthdate(), formatter);
+        UserType userType = userTypeRepository.findByName(userRegistrationDto.getUserType());
+        log.info("Setting name");
+        user.setName(userRegistrationDto.getName());
+        log.info("Setting email");
+        user.setEmail(userRegistrationDto.getEmail());
+        log.info("Setting user type");
+        user.setUserType(userType);
+        log.info("Setting birthdate");
+        user.setBirthdate(birthdate);
+        log.info("Setting password");
+        user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
         return mapUserToDto(userRepository.save(user));
     }
 
@@ -50,9 +69,15 @@ public class UserService {
     }
 
     public UserDto findUserByEmail(String email) {
-        boolean doesExist = userRepository.existsByEmail(email);
-        if (!doesExist) throw new UserEmailDoesntExistException("There is no user with email "+email+" or a typo was done");
+//        log.info("Checking availability of email: ");
+//        boolean doesExist = userRepository.existsByEmail(email);
+//        log.info("      "+ !doesExist);
+//        if (doesExist) throw new UserEmailDoesntExistException("There is no user with email "+email+" or a typo was done");
         return mapUserToDto(userRepository.findUserByEmail(email).get());
+    }
+
+    public boolean checkEmailExistence(String email){
+        return userRepository.existsByEmail(email);
     }
 
     public boolean updateUser(UserDto userDto) {

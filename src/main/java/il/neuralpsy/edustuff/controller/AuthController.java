@@ -1,9 +1,11 @@
 package il.neuralpsy.edustuff.controller;
 
 import il.neuralpsy.edustuff.dto.UserDto;
+import il.neuralpsy.edustuff.dto.UserRegistrationDto;
 import il.neuralpsy.edustuff.model.User;
 import il.neuralpsy.edustuff.service.UserService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,11 +13,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
+@Slf4j
 public class AuthController {
 
     private UserService userService;
@@ -25,49 +29,54 @@ public class AuthController {
         this.userService = userService;
     }
 
-    // handler method to handle home page request
     @GetMapping("/index")
     public String home(){
+        log.info("Index page request");
         return "index";
     }
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model){
-        // create model object to store form data
+        log.info("Show registration form");
         UserDto user = new UserDto();
         model.addAttribute("user", user);
         return "register";
     }
 
-    // handler method to handle user registration form submit request
     @PostMapping("/register/save")
-    public String registration(@Valid @ModelAttribute("user") UserDto userDto,
+    public String registration(@ModelAttribute("user") UserRegistrationDto userRegistrationDto,
                                BindingResult result,
                                Model model){
-        UserDto existingUser = userService.findUserByEmail(userDto.getEmail());
+        log.info("Trying to save user: ");
+        boolean doesExist = userService.checkEmailExistence(userRegistrationDto.getEmail());
 
-        if(existingUser != null && existingUser.getEmail() != null && !existingUser.getEmail().isEmpty()){
+        if(doesExist){
+            log.info("Can not add user");
             result.rejectValue("email", null,
                     "There is already an account registered with the same email");
         }
 
         if(result.hasErrors()){
-            model.addAttribute("user", userDto);
-            return "/register";
+            log.info("There's some errors");
+            model.addAttribute("user", userRegistrationDto);
+            return "register";
         }
 
-        userService.addUser(userDto);
+        userService.addUser(userRegistrationDto);
+        log.info("Success!");
         return "redirect:/register?success";
     }
 
-    @GetMapping("/users")
-    public String users(Model model){
-        List<UserDto> users = userService.getAll().stream().collect(Collectors.toList());
-        model.addAttribute("users", users);
-        return "users";
+    @GetMapping("/teacher")
+    public String teacher(){
+        return "teacher";
     }
 
-    // handler method to handle login request
+    @GetMapping("/student")
+    public String student(Model model){
+        return "student";
+    }
+
     @GetMapping("/login")
     public String login(){
         return "login";
