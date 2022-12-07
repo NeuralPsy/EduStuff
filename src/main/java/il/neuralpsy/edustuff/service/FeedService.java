@@ -41,4 +41,10 @@ public class FeedService {
         feedRepository.save(event);
     }
 
+    public Collection<FeedEventDto> getStudentsFeed() {
+        return feedRepository.findAllByUserUserType_Name("STUDENT")
+                .stream()
+                .map(event -> modelMapper.map(event, FeedEventDto.class)).collect(Collectors.toSet());
+    }
+
 }

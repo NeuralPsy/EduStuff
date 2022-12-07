@@ -22,8 +22,9 @@ public class SecurityConfiguration {
         http.csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/register/**").permitAll()
-                .requestMatchers("/index").permitAll()
-                .requestMatchers("/users").hasRole("TEACHER")
+                .requestMatchers("/login").permitAll()
+                .requestMatchers("/index").authenticated()
+                .requestMatchers("/user").authenticated()
                 .requestMatchers("/teacher").hasRole("TEACHER")
                 .requestMatchers("/student").hasRole("STUDENT")
                 .requestMatchers("/user/**").authenticated()
@@ -36,7 +37,7 @@ public class SecurityConfiguration {
                         form -> form
                                 .loginPage("/login")
                                 .loginProcessingUrl("/login")
-                                .defaultSuccessUrl("/users")
+                                .defaultSuccessUrl("/index")
                                 .permitAll()
                 ).logout(
                         logout -> logout

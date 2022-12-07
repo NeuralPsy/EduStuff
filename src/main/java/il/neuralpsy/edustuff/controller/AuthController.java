@@ -2,9 +2,7 @@ package il.neuralpsy.edustuff.controller;
 
 import il.neuralpsy.edustuff.dto.UserDto;
 import il.neuralpsy.edustuff.dto.UserRegistrationDto;
-import il.neuralpsy.edustuff.model.User;
 import il.neuralpsy.edustuff.service.UserService;
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,10 +11,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @Slf4j

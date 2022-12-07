@@ -17,13 +17,12 @@ import java.util.stream.Collectors;
 @RequestMapping("/user")
 public class UserController {
     private final UserService service;
-    private final FeedService feedService;
+
 
 
     @Autowired
-    public UserController(UserService service, FeedService feedService){
+    public UserController(UserService service){
         this.service = service;
-        this.feedService = feedService;
     }
 
 //    @PostMapping
@@ -61,8 +60,4 @@ public class UserController {
         return service.getAllByUserType(userTypeId);
     }
 
-    @GetMapping("/{userId}/feed")
-    public Collection<FeedEventDto> getUserFeeds(@PathVariable Integer userId){
-        return feedService.getUserFeed(userId);
-    }
 }
