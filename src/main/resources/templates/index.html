@@ -35,18 +35,20 @@
     <div class="row">
         <h1 class="text-center"> Education Stuff - Just tasks and comments </h1>
         <div id="userinfo" class="col-sm-5 col-lg-3">
-            <h3>User's details</h3>
-            <p id="name"></p>
-            <p id="role"></p>
-            <p id="birthdate"></p>
-            <p id="email"></p>
+            <p class="fs-3">User's details</p>
+            <p class="fs-5">ID: <span id="userId"></span ></p>
+            <p class="fs-5">Name: <span id="name"></span></p>
+            <p class="fs-5">Role: <span id="role"></span></p>
+            <p class="fs-5">Birthdate: <span id="birthdate"></span></p>
+            <p class="fs-5">E-mail: <span id="email"></span></p>
             <script th:inline="javascript">
                 var userEmail = [[${#authentication.name}]];
                 $.getJSON("user/email?email="+userEmail, function (userInfo) {
-                        document.getElementById("name").innerText = "Name: "+ userInfo.name;
-                        document.getElementById("role").innerText = "Role: "+ userInfo.userType.name.toLowerCase();
-                        document.getElementById("birthdate").innerText = "Birthdate: "+ userInfo.birthdate;
-                        document.getElementById("email").innerText = "Email: "+ userInfo.email;
+                        document.getElementById("userId").innerText = userInfo.userId;
+                        document.getElementById("name").innerText = userInfo.name;
+                        document.getElementById("role").innerText = userInfo.userType.name.toLowerCase();
+                        document.getElementById("birthdate").innerText = userInfo.birthdate;
+                        document.getElementById("email").innerText = userInfo.email;
                     }
                 );
             </script>
