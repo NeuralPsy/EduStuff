@@ -23,6 +23,6 @@ public class UserDto {
     private String email;
     private UserType userType;
     private LocalDate birthdate;
-    private String password;
+//    private String password;
 
 }
