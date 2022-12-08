@@ -8,7 +8,11 @@ import lombok.Getter;
 public enum Operation {
     ADD(1),
     UPDATE(2),
-    DELETE(3);
+    DELETE(3),
+
+    CREATE(4),
+
+    TAKE(5);
 
     private final int id;
 

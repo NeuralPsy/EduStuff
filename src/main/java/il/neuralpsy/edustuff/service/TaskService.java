@@ -1,10 +1,13 @@
 package il.neuralpsy.edustuff.service;
 
+import il.neuralpsy.edustuff.dto.SubjectDto;
 import il.neuralpsy.edustuff.dto.TaskDto;
 import il.neuralpsy.edustuff.exception.TaskDoesntExistException;
 import il.neuralpsy.edustuff.exception.UserDoesntExistException;
+import il.neuralpsy.edustuff.model.Subject;
 import il.neuralpsy.edustuff.model.Task;
 import il.neuralpsy.edustuff.model.User;
+import il.neuralpsy.edustuff.repository.SubjectRepository;
 import il.neuralpsy.edustuff.repository.TaskRepository;
 import il.neuralpsy.edustuff.repository.UserRepository;
 import org.modelmapper.ModelMapper;
@@ -13,6 +16,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -24,19 +28,25 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
-
     private final ModelMapper modelMapper;
+    private final SubjectRepository subjectRepository;
 
     @Autowired
-    public TaskService(TaskRepository taskRepository, UserRepository userRepository, ModelMapper modelMapper){
+    public TaskService(TaskRepository taskRepository, UserRepository userRepository,
+                       SubjectRepository subjectRepository, ModelMapper modelMapper){
         this.taskRepository = taskRepository;
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
+        this.subjectRepository = subjectRepository;
     }
 
 
-    public TaskDto addTask(Task task){
-        return modelMapper.map(taskRepository.save(task), TaskDto.class);
+    public boolean addTask(TaskDto taskDto){
+        Subject subject = subjectRepository.findByName(taskDto.getName());
+        Task task = modelMapper.map(taskDto, Task.class);
+        task.setSubject(subject);
+        taskRepository.save(task);
+        return true;
     }
 
     public Collection<TaskDto> getAll() {
@@ -75,11 +85,10 @@ public class TaskService {
         return true;
     }
 
-    public boolean giveTaskToUser(Integer taskId, Integer userId) {
-        taskRepository.findById(taskId).get().setUser(userRepository.findById(userId).get());
-//
-//        userRepository.update(user.getName(), user.getEmail(), user.getBirthdate(), userId);
-////        taskRepository.updateTask(task.getName(), task.getStartTime(), task.getTaskStatus(), taskId);
+
+    public boolean setUserForTask(Integer taskId, User student) {
+        Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
+        taskRepository.putUserIntoTask(student, timestamp, taskId);
         return true;
     }
 }

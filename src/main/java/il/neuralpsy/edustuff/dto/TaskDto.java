@@ -10,7 +10,8 @@ import java.sql.Timestamp;
 public class TaskDto {
     private Integer taskId;
     private String name;
-    private Subject subject;
+    private String content;
+    private String subject;
     private Timestamp startTime;
     private TaskStatus taskStatus;
 

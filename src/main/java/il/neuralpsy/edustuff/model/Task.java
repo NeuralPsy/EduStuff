@@ -26,6 +26,7 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;
+    private String content;
     private Timestamp startTime;
     @OneToOne
     @JoinColumn(referencedColumnName = "taskStatusId")

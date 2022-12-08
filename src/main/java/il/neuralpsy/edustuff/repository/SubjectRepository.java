@@ -19,4 +19,6 @@ public interface SubjectRepository extends JpaRepository<Subject, Integer> {
     void addSubjectToUser(@Param("user") User user, @Param("subjectId") Integer subjectId);
 
     Collection<Subject> findSubjectsByUserUserId(Integer userId);
+
+    Subject findByName(String name);
 }

@@ -7,7 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum AllowedFeedEvents {
 
-    ADD_TASK(Operation.ADD, EventType.TASK),
+    TAKE_TASK(Operation.TAKE, EventType.TASK),
+    CREATE_TASK(Operation.CREATE, EventType.TASK),
     UPDATE_TASK(Operation.UPDATE, EventType.TASK),
     DELETE_TASK(Operation.DELETE, EventType.TASK),
     ADD_COMMENT(Operation.ADD, EventType.COMMENT),

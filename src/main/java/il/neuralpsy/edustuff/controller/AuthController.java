@@ -1,5 +1,6 @@
 package il.neuralpsy.edustuff.controller;
 
+import il.neuralpsy.edustuff.dto.TaskDto;
 import il.neuralpsy.edustuff.dto.UserDto;
 import il.neuralpsy.edustuff.dto.UserRegistrationDto;
 import il.neuralpsy.edustuff.service.UserService;
@@ -31,8 +32,10 @@ public class AuthController {
     }
 
     @GetMapping("/createtask")
-    public String createTask(){
+    public String createTask(Model model){
         log.info("Create task page request");
+        TaskDto taskDto = new TaskDto();
+        model.addAttribute("task", taskDto);
         return "createtask";
     }
 

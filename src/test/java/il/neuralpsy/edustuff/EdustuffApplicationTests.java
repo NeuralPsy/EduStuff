@@ -1,11 +1,9 @@
 package il.neuralpsy.edustuff;
 
-import il.neuralpsy.edustuff.controller.UserController;
-import il.neuralpsy.edustuff.dto.UserDto;
+import il.neuralpsy.edustuff.controller.UserRestController;
 import il.neuralpsy.edustuff.model.User;
 import il.neuralpsy.edustuff.model.UserType;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,7 +17,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 class EdustuffApplicationTests {
 
 	@Autowired
-	private final UserController userController;
+	private final UserRestController userRestController;
 
 	@Autowired
 	private final ModelMapper modelMapper;
