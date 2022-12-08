@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+  <meta charset="UTF-8">
+  <title>Education Stuff - Just tasks and comments</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+          integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+        crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" th:href="@{/index}">Education Stuff - Just tasks and comments</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" th:href="@{/logout}">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<br /><br />
+<div class="container">
+  <div class="row">
+    <h1 class="text-center"> Education Stuff - Just tasks and comments </h1>
+    <div id="userinfo" class="col-sm-5 col-lg-3">
+      <p class="fs-3">User's details</p>
+      <p class="fs-5">ID: <span id="userId"></span ></p>
+      <p class="fs-5">Name: <span id="name"></span></p>
+      <p class="fs-5">Role: <span id="role"></span></p>
+      <p class="fs-5">Birthdate: <span id="birthdate"></span></p>
+      <p class="fs-5">E-mail: <span id="email"></span></p>
+      <script th:inline="javascript">
+        var userEmail = [[${#authentication.name}]];
+        $.getJSON("user/email?email="+userEmail, function (userInfo) {
+                  document.getElementById("userId").innerText = userInfo.userId;
+                  document.getElementById("name").innerText = userInfo.name;
+                  document.getElementById("role").innerText = userInfo.userType.name.toLowerCase();
+                  document.getElementById("birthdate").innerText = userInfo.birthdate;
+                  document.getElementById("email").innerText = userInfo.email;
+                }
+        );
+      </script>
+      <p class="fs-3">Available actions</p>
+      <a th:href="@{/index}">Go to main page</a>
+
+    </div>
+    <div class="col-sm-7 col-lg-8">
+      <p class="fs-5">You are about to create a task...</p>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

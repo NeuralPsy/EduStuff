@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @Slf4j
@@ -27,6 +28,12 @@ public class AuthController {
     public String home(){
         log.info("Index page request");
         return "index";
+    }
+
+    @GetMapping("/createtask")
+    public String createTask(){
+        log.info("Create task page request");
+        return "createtask";
     }
 
     @GetMapping("/register")

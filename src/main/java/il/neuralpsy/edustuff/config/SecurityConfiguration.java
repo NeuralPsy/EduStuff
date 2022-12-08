@@ -16,7 +16,6 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
-    // configure SecurityFilterChain
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
@@ -25,7 +24,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/login").permitAll()
                 .requestMatchers("/index").authenticated()
                 .requestMatchers("/user").authenticated()
-                .requestMatchers("/teacher").hasRole("TEACHER")
+                .requestMatchers("/createtask").authenticated()
                 .requestMatchers("/student").hasRole("STUDENT")
                 .requestMatchers("/user/**").authenticated()
                 .requestMatchers("/task/**").authenticated()

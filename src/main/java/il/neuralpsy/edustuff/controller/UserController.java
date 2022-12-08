@@ -25,11 +25,6 @@ public class UserController {
         this.service = service;
     }
 
-//    @PostMapping
-//    public UserDto addUser(@RequestBody @Valid UserRegistrationDto userDto){
-//        return service.addUser(userDto);
-//    }
-
     @GetMapping("/{userId}")
     public UserDto getUserById(@PathVariable Integer userId){
         return service.getUserById(userId);
