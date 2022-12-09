@@ -3,6 +3,7 @@ package il.neuralpsy.edustuff.controller;
 import il.neuralpsy.edustuff.dto.FeedEventDto;
 import il.neuralpsy.edustuff.service.FeedService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -18,18 +19,9 @@ public class FeedController {
         this.feedService = feedService;
     }
 
-    @GetMapping("/students/{userId}")
-    public Collection<FeedEventDto> getUserFeeds(@PathVariable Integer userId){
-        return feedService.getUserFeed(userId);
+    @GetMapping("/{userId}/{role}/all")
+    public Collection<FeedEventDto> getAllBasedOnRole(@PathVariable String role, @PathVariable Integer userId){
+        return feedService.getAll(role, userId);
     }
 
-    @GetMapping("/students")
-    public Collection<FeedEventDto> getAllStudentFeeds(){
-        return feedService.getStudentsFeed();
-    }
-
-    @GetMapping("/own")
-    public Collection<FeedEventDto> getOwnFeeds(@RequestParam("userId") Integer userId){
-        return feedService.getUserFeed(userId);
-    }
 }

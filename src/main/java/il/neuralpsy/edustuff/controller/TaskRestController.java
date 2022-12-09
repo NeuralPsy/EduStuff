@@ -18,7 +18,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
-@Controller
+@RestController
 @RequestMapping("/task")
 public class TaskRestController {
 
@@ -50,7 +50,8 @@ public class TaskRestController {
         feedEvent.setEventType(EventType.TASK);
         feedEvent.setUser(student);
         feedEvent.setFeedDetails(AllowedFeedEvents.TAKE_TASK);
-        feedEvent.setTimestamp(Timestamp.valueOf(LocalDateTime.now()));
+        feedEvent.setTimestamp(LocalDateTime.now());
+        feedEvent.setEventObjectId(taskId);
         eventPublisher.publishEvent(feedEvent);
 
         taskService.setUserForTask(taskId, student);
@@ -86,7 +87,8 @@ public class TaskRestController {
         feedEvent.setEventType(EventType.TASK);
         feedEvent.setUser(user);
         feedEvent.setFeedDetails(AllowedFeedEvents.UPDATE_TASK);
-        feedEvent.setTimestamp(Timestamp.valueOf(LocalDateTime.now()));
+        feedEvent.setTimestamp(LocalDateTime.now());
+        feedEvent.setEventObjectId(taskDto.getTaskId());
         eventPublisher.publishEvent(feedEvent);
 
         return taskService.updateTask(taskDto);
@@ -95,6 +97,11 @@ public class TaskRestController {
     @DeleteMapping("/{taskId}")
     public boolean removeTask(@PathVariable Integer taskId){
         return taskService.removeTask(taskId);
+    }
+
+    @GetMapping("/available")
+    public Collection<TaskDto> getAvailableTasks(){
+        return taskService.getAvailableTasks();
     }
 
 

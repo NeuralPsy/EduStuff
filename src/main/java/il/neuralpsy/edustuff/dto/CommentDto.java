@@ -6,6 +6,8 @@ import jakarta.persistence.Id;
 import lombok.Data;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 @Data
 public class CommentDto {
     @Id
@@ -13,5 +15,5 @@ public class CommentDto {
     private Integer commentId;
     private UserDto user;
     private String text;
-    private Timestamp timestamp;
+    private LocalDateTime timestamp;
 }

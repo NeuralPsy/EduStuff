@@ -1,10 +1,9 @@
 package il.neuralpsy.edustuff.dto;
 
-import il.neuralpsy.edustuff.model.Subject;
 import il.neuralpsy.edustuff.model.TaskStatus;
 import lombok.Data;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 public class TaskDto {
@@ -12,7 +11,7 @@ public class TaskDto {
     private String name;
     private String content;
     private String subject;
-    private Timestamp startTime;
+    private LocalDateTime startTime;
     private TaskStatus taskStatus;
 
 }

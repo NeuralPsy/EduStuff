@@ -4,7 +4,7 @@
 >
 <head>
     <meta charset="UTF-8">
-    <title>Education Stuff - Just tasks and comments</title>
+    <title class="font-weight-normal">Education Stuff - Just tasks and comments</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
             integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -33,8 +33,8 @@
 <br/><br/>
 <div class="container">
     <div class="row">
-        <h1 class="text-center"> Education Stuff - Just tasks and comments </h1>
-        <div id="userinfo" class="col-sm-5 col-lg-3">
+        <h1 class="text-center font-weight-normal"> Education Stuff - Just tasks and comments </h1>
+        <div id="userinfo" class="col-sm-5 col-lg-3 font-weight-light">
             <p class="fs-3">User's details</p>
             <p class="fs-5">ID: <span id="userId"></span></p>
             <p class="fs-5">Name: <span id="name"></span></p>
@@ -52,14 +52,15 @@
                     }
                 );
             </script>
-            <p class="fs-3">Available actions</p>
-            <a th:href="@{/index}">Go to main page</a>
+            <h3 class="fs-3 font-weight-normal">Available actions</h3>
+            <a type="button" class="btn btn-secondary" th:href="@{/index}">Go to main page</a>
+            <a type="button" class="btn btn-secondary" th:href="@{/feed}">Users events</a>
 
         </div>
         <div class="col-sm-7 col-lg-8">
             <div class="card">
                 <div class="card-header">
-                    <h2 id="creationresult" class="text-center">You are about to create a task...</h2>
+                    <p id="creationresult" class="text-center font-weight-normal">You are about to create a task...</p>
                 </div>
                 <div th:if="${param.success}">
                     <div class="alert alert-info">
@@ -91,12 +92,11 @@
                             <select class="form-control"
                                     id="subject"
                                     name="subject"
-                                    th:field="*{subject}"
-                            >
+                                    th:field="*{subject}">
                                 <script>
                                 $.getJSON("/subject", function (subjects) {
                                     $.each(subjects, function (i, name) {
-                                        $("#subject").append("<option value=" + i + ">" + name.name + "</option>");
+                                        $("#subject").append("<option value=\""+name.name+"\">" + name.name + "</option>");
                                     })
                                 })
                                 </script>

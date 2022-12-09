@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,12 +19,13 @@ public class FeedEvent implements Comparable<FeedEvent>{
     @Id
     @GeneratedValue
     private Integer eventId;
+    private Integer eventObjectId;
     @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;
     private EventType eventType;
     private AllowedFeedEvents feedDetails;
-    private Timestamp timestamp;
+    private LocalDateTime timestamp;
 
     @Override
     public int compareTo(FeedEvent o) {

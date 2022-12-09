@@ -41,12 +41,11 @@ public class TaskService {
     }
 
 
-    public boolean addTask(TaskDto taskDto){
-        Subject subject = subjectRepository.findByName(taskDto.getName());
-        Task task = modelMapper.map(taskDto, Task.class);
+    public TaskDto addTask(TaskDto taskDto){
+        Subject subject = subjectRepository.findByName(taskDto.getSubject());
+        Task task = mapDtoToTask(taskDto);
         task.setSubject(subject);
-        taskRepository.save(task);
-        return true;
+        return mapTaskToDto(taskRepository.save(task));
     }
 
     public Collection<TaskDto> getAll() {
@@ -57,7 +56,7 @@ public class TaskService {
     public TaskDto getTaskById(Integer taskId) {
         TaskDto taskDto;
         try {
-            taskDto = modelMapper.map(taskRepository.findById(taskId), TaskDto.class);
+            taskDto = mapTaskToDto(taskRepository.findById(taskId).get());
         } catch (EmptyResultDataAccessException e){
             throw new TaskDoesntExistException("There's no task with ID "+taskId);
         }
@@ -67,7 +66,9 @@ public class TaskService {
     public Collection<TaskDto> getTasksByUserId(Integer userId) {
         boolean isValid = userRepository.existsById(userId);
         if (!isValid) throw new UserDoesntExistException("There's no user with ID "+userId);
-        return taskRepository.findTasksByUser_UserId(userId).stream().map(task -> modelMapper.map(task, TaskDto.class))
+        return taskRepository.findTasksByUser_UserId(userId)
+                .stream()
+                .map(task -> mapTaskToDto(task))
                 .collect(Collectors.toList());
     }
 
@@ -90,5 +91,40 @@ public class TaskService {
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
         taskRepository.putUserIntoTask(student, timestamp, taskId);
         return true;
+    }
+
+    public Collection<TaskDto> getAvailableTasks() {
+        return taskRepository.getTaskByUserIsNull()
+                .stream()
+                .map(task -> modelMapper.map(task, TaskDto.class))
+                .collect(Collectors.toSet());
+    }
+
+    private TaskDto mapTaskToDto(Task task){
+        TaskDto taskDto = new TaskDto();
+
+        taskDto.setTaskId(task.getTaskId());
+        taskDto.setName(task.getName());
+        taskDto.setTaskStatus(task.getTaskStatus());
+        taskDto.setSubject(task.getSubject().getName());
+        taskDto.setStartTime(task.getStartTime());
+        taskDto.setContent(task.getContent());
+
+        return taskDto;
+    }
+
+    private Task mapDtoToTask(TaskDto taskDto){
+        Task task = new Task();
+
+        Subject subject = subjectRepository.findByName(taskDto.getSubject());
+
+        task.setTaskId(taskDto.getTaskId());
+        task.setName(taskDto.getName());
+        task.setTaskStatus(taskDto.getTaskStatus());
+        task.setSubject(subject);
+        task.setStartTime(taskDto.getStartTime());
+        task.setContent(taskDto.getContent());
+
+        return task;
     }
 }

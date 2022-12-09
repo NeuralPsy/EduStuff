@@ -7,12 +7,12 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum AllowedFeedEvents {
 
-    TAKE_TASK(Operation.TAKE, EventType.TASK),
-    CREATE_TASK(Operation.CREATE, EventType.TASK),
-    UPDATE_TASK(Operation.UPDATE, EventType.TASK),
-    DELETE_TASK(Operation.DELETE, EventType.TASK),
-    ADD_COMMENT(Operation.ADD, EventType.COMMENT),
-    DELETE_COMMENT(Operation.DELETE, EventType.COMMENT);
+    TAKE_TASK(Operation.TAKEN, EventType.TASK),
+    CREATE_TASK(Operation.CREATED, EventType.TASK),
+    UPDATE_TASK(Operation.UPDATED, EventType.TASK),
+    DELETE_TASK(Operation.DELETED, EventType.TASK),
+    ADD_COMMENT(Operation.ADDED, EventType.COMMENT),
+    DELETE_COMMENT(Operation.DELETED, EventType.COMMENT);
 
     private final Operation operation;
     private final EventType type;

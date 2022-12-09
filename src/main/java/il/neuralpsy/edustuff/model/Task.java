@@ -27,7 +27,7 @@ public class Task {
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;
     private String content;
-    private Timestamp startTime;
+    private LocalDateTime startTime;
     @OneToOne
     @JoinColumn(referencedColumnName = "taskStatusId")
     private TaskStatus taskStatus;

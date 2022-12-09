@@ -48,13 +48,16 @@ public class TaskController {
 
         FeedEvent feedEvent = new FeedEvent();
 
+        Integer taskId = taskService.addTask(taskDto).getTaskId();
+
         feedEvent.setEventType(EventType.TASK);
+        feedEvent.setEventObjectId(taskId);
         feedEvent.setUser(teacher);
         feedEvent.setFeedDetails(AllowedFeedEvents.CREATE_TASK);
-        feedEvent.setTimestamp(Timestamp.valueOf(LocalDateTime.now()));
+        feedEvent.setTimestamp(LocalDateTime.now());
+
         eventPublisher.publishEvent(feedEvent);
 
-        taskService.addTask(taskDto);
 
         return "redirect:/createtask?success";
     }

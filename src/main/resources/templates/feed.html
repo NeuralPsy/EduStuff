@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+  <meta charset="UTF-8">
+  <title class="font-weight-normal">Education Stuff - Just tasks and comments</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+          integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+        crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" th:href="@{/index}">Education Stuff - Just tasks and comments</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" th:href="@{/logout}">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<br/><br/>
+<div class="container">
+  <div class="row">
+    <h1 class="text-center font-weight-normal"> Education Stuff - Just tasks and comments </h1>
+    <div id="userinfo" class="col-sm-5 col-lg-3 font-weight-light">
+      <p class="fs-3">User's details</p>
+      <p class="fs-5">ID: <span id="userId"></span></p>
+      <p class="fs-5">Name: <span id="name"></span></p>
+      <p class="fs-5">Role: <span id="role"></span></p>
+      <p class="fs-5">Birthdate: <span id="birthdate"></span></p>
+      <p class="fs-5">E-mail: <span id="email"></span></p>
+      <script th:inline="javascript">
+        var userEmail = [[${#authentication.name}]];
+        $.getJSON("user/email?email=" + userEmail, function (userInfo) {
+                  document.getElementById("userId").innerText = userInfo.userId;
+                  document.getElementById("name").innerText = userInfo.name;
+                  document.getElementById("role").innerText = userInfo.userType.name.toLowerCase();
+                  document.getElementById("birthdate").innerText = userInfo.birthdate;
+                  document.getElementById("email").innerText = userInfo.email;
+                }
+        );
+      </script>
+      <h3 class="fs-3 font-weight-normal">Available actions</h3>
+      <a type="button" class="btn btn-secondary" th:href="@{/index}">Go to main page</a>
+      <a type="button" class="btn btn-secondary" th:href="@{/createtask}">Create a task</a>
+
+    </div>
+    <div class="col-sm-7 col-lg-8">
+      <div class="card">
+        <div class="card-header">
+          <p id="feedlist" class="text-center font-weight-normal">Event list</p>
+        </div>
+
+        </div>
+            <div  id="feed"class="form-group mb-3">
+                <script th:inline="javascript">
+
+
+                  var userEmail = [[${#authentication.name}]];
+                  $.getJSON("user/email?email=" + userEmail, function (userInfo) {
+                    var userId = userInfo.userId;
+                    var role = userInfo.userType.name.toLowerCase();
+
+                    $.getJSON("/feed/" + userId + "/" + role + "/all", function (subjects) {
+                      $.each(subjects, function (key, name) {
+                        var evID = "Event ID: " + name.eventId;
+                        let itemId = name.objectId;
+                        let infoMsg = name.objectName + " WAS " + name.operationType + " BY ";
+                        infoMsg = infoMsg[0] + infoMsg.slice(1, infoMsg.length).toLowerCase();
+
+                        var date = Date.parse(name.timestamp);
+                        date = new Date(date);
+                        infoMsg.toLowerCase();
+                        $("#feed").append("<div id=\"objectboxes\" class=\"card overflow-auto\"><div>" + evID + "</div>" +
+                                "<p >" + date + "</p>"+
+                                 "<p><a href=\"/"+name.objectName.toLowerCase()+"/"+itemId+"\" method=\"get\">"+infoMsg + name.userName+ "</a></p></div>");
+
+                        function viewObject(objectName, objectId){
+                          $.getJSON("/"+objectName.toLowerCase()+"/"+objectId, function (object){
+                            $("#objectboxes").replaceAll("<div id=\"objectbox\" class=\"card overflow-auto\">" +
+                                    "<div>" + objectName + " ID: "+objectId+"</div>" +
+                                    "<p >" + object.name + "</p>"+
+                                    "<p >" + object.user.name + "</p>"+
+                                    "<p>" + objectName + "</p></div>")
+                          })
+                        }
+
+
+                      })
+                    });
+
+                  });
+
+
+
+
+
+                </script>
+
+            </div>
+
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

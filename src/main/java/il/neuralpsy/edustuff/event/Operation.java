@@ -6,13 +6,13 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Operation {
-    ADD(1),
-    UPDATE(2),
-    DELETE(3),
+    ADDED(1),
+    UPDATED(2),
+    DELETED(3),
 
-    CREATE(4),
+    CREATED(4),
 
-    TAKE(5);
+    TAKEN(5);
 
     private final int id;
 

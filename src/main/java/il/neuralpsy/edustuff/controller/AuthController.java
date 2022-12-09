@@ -31,6 +31,12 @@ public class AuthController {
         return "index";
     }
 
+    @GetMapping("/feed")
+    public String feed(){
+        log.info("Feed page request");
+        return "feed";
+    }
+
     @GetMapping("/createtask")
     public String createTask(Model model){
         log.info("Create task page request");
@@ -42,7 +48,7 @@ public class AuthController {
     @GetMapping("/register")
     public String showRegistrationForm(Model model){
         log.info("Show registration form");
-        UserDto user = new UserDto();
+        UserRegistrationDto user = new UserRegistrationDto();
         model.addAttribute("user", user);
         return "register";
     }

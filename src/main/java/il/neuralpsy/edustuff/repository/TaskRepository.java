@@ -37,4 +37,6 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     @Query("update Task set user = :user, startTime = :startTime where taskId = :taskId")
     void putUserIntoTask(@Param("user") User user, @Param("startTime") Timestamp startTime,
                          @Param("taskId") Integer taskId);
+
+    Collection<Task> getTaskByUserIsNull();
 }

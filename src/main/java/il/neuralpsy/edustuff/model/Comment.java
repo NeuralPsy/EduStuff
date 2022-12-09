@@ -25,7 +25,7 @@ public class Comment implements Comparable<Comment>{
    @JoinColumn(name = "tasks")
     private Task task;
     private String text;
-    private Timestamp timestamp;
+    private LocalDateTime timestamp;
 
     @Override
     public int compareTo(Comment o) {
