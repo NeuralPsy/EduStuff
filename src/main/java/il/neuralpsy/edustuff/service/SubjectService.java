@@ -46,16 +46,6 @@ public class SubjectService {
         return modelMapper.map(subjectRepository.save(subject), SubjectDto.class);
     }
 
-    public boolean addSubjectToUser(Integer subjectId, Integer userId) {
-        User user = userRepository.findById(userId).get();
-        subjectRepository.addSubjectToUser(user, subjectId);
-        return true;
-    }
-
-    public Collection<SubjectDto> getSubjectsByUserId(Integer userId) {
-        return subjectRepository.findSubjectsByUserUserId(userId).stream().map(subject -> modelMapper.map(subject,
-                SubjectDto.class)).collect(Collectors.toList());
-    }
 
     public boolean removeSubject(Integer subjectId) {
         try {

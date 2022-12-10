@@ -13,12 +13,6 @@ import java.util.Collection;
 
 @Component
 public interface SubjectRepository extends JpaRepository<Subject, Integer> {
-    @Transactional
-    @Modifying
-    @Query("update Subject set user = :user where subjectId = :subjectId")
-    void addSubjectToUser(@Param("user") User user, @Param("subjectId") Integer subjectId);
-
-    Collection<Subject> findSubjectsByUserUserId(Integer userId);
 
     Subject findByName(String name);
 }

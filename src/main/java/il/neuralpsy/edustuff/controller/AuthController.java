@@ -1,7 +1,6 @@
 package il.neuralpsy.edustuff.controller;
 
 import il.neuralpsy.edustuff.dto.TaskDto;
-import il.neuralpsy.edustuff.dto.UserDto;
 import il.neuralpsy.edustuff.dto.UserRegistrationDto;
 import il.neuralpsy.edustuff.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +11,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @Slf4j
@@ -29,6 +27,12 @@ public class AuthController {
     public String home(){
         log.info("Index page request");
         return "index";
+    }
+
+    @GetMapping("/tasks")
+    public String tasks(){
+        log.info("Task page request");
+        return "tasks";
     }
 
     @GetMapping("/feed")
@@ -77,15 +81,6 @@ public class AuthController {
         return "redirect:/register?success";
     }
 
-    @GetMapping("/teacher")
-    public String teacher(){
-        return "teacher";
-    }
-
-    @GetMapping("/student")
-    public String student(Model model){
-        return "student";
-    }
 
     @GetMapping("/login")
     public String login(){

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -37,28 +38,6 @@ public class TaskRestController {
     }
 
 
-    @PutMapping("/take/{taskId}/student/{studentId}")
-    public String takeTask(@PathVariable Integer taskId,
-                           @PathVariable Integer studentId, Model model){
-
-
-
-        User student = userRepository.findById(studentId).get();
-
-        FeedEvent feedEvent = new FeedEvent();
-
-        feedEvent.setEventType(EventType.TASK);
-        feedEvent.setUser(student);
-        feedEvent.setFeedDetails(AllowedFeedEvents.TAKE_TASK);
-        feedEvent.setTimestamp(LocalDateTime.now());
-        feedEvent.setEventObjectId(taskId);
-        eventPublisher.publishEvent(feedEvent);
-
-        taskService.setUserForTask(taskId, student);
-
-        return "redirect:/take?success";
-    }
-
 
     @GetMapping
     public Collection<TaskDto> getAll(){
@@ -77,6 +56,8 @@ public class TaskRestController {
         return taskService.getTasksByUserId(userId);
     }
 
+
+
     @PutMapping("/update/{updatorId}")
     public boolean updateTask(@RequestBody TaskDto taskDto, @PathVariable Integer updatorId){
 
@@ -94,15 +75,12 @@ public class TaskRestController {
         return taskService.updateTask(taskDto);
     }
 
+
     @DeleteMapping("/{taskId}")
     public boolean removeTask(@PathVariable Integer taskId){
         return taskService.removeTask(taskId);
     }
 
-    @GetMapping("/available")
-    public Collection<TaskDto> getAvailableTasks(){
-        return taskService.getAvailableTasks();
-    }
 
 
 }

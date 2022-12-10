@@ -22,6 +22,6 @@ public class FeedEventDto implements Comparable<FeedEventDto>{
 
     @Override
     public int compareTo(FeedEventDto o) {
-        return this.timestamp.compareTo(o.timestamp);
+        return o.timestamp.compareTo(this.timestamp);
     }
 }

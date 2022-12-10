@@ -34,15 +34,6 @@ public class SubjectController {
         return subjectService.addSubject(subjectDto);
     }
 
-    @PutMapping("/{subjectId}/user/{userId}")
-    public boolean addSubjectToUser(@PathVariable Integer subjectId, @PathVariable Integer userId){
-        return subjectService.addSubjectToUser(subjectId, userId);
-    }
-
-    @GetMapping("/user/{userId}")
-    public Collection<SubjectDto> getSubjectsByUserId(@PathVariable Integer userId){
-        return subjectService.getSubjectsByUserId(userId);
-    }
 
     @DeleteMapping("/{subjectId}")
     public boolean removeSubject(@PathVariable Integer subjectId){

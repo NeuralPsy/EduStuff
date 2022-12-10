@@ -20,8 +20,8 @@ public class Subject {
     private String name;
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="subjects")
-    private User user;
+    @JoinColumn(name="subject")
+    private Task task;
 
 
     public Subject(Integer subjectId, String name){

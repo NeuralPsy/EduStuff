@@ -49,7 +49,7 @@ public class TaskService {
     }
 
     public Collection<TaskDto> getAll() {
-        return taskRepository.findAll().stream().map(task -> modelMapper.map(task, TaskDto.class))
+        return taskRepository.findAll().stream().map(task -> mapTaskToDto(task))
                 .collect(Collectors.toList());
     }
 
@@ -73,7 +73,7 @@ public class TaskService {
     }
 
     public boolean updateTask(TaskDto taskDto) {
-        Task task = modelMapper.map(taskDto, Task.class);
+        Task task = mapDtoToTask(taskDto);
         taskRepository.updateTaskStatus(task.getTaskStatus(), task.getTaskId());
         return true;
     }
@@ -86,34 +86,33 @@ public class TaskService {
         return true;
     }
 
-
     public boolean setUserForTask(Integer taskId, User student) {
-        Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
+        LocalDateTime timestamp = LocalDateTime.now();
         taskRepository.putUserIntoTask(student, timestamp, taskId);
         return true;
     }
 
-    public Collection<TaskDto> getAvailableTasks() {
-        return taskRepository.getTaskByUserIsNull()
-                .stream()
-                .map(task -> modelMapper.map(task, TaskDto.class))
-                .collect(Collectors.toSet());
-    }
 
-    private TaskDto mapTaskToDto(Task task){
+    public TaskDto mapTaskToDto(Task task){
         TaskDto taskDto = new TaskDto();
+
+        Subject subject = task.getSubject();
 
         taskDto.setTaskId(task.getTaskId());
         taskDto.setName(task.getName());
         taskDto.setTaskStatus(task.getTaskStatus());
-        taskDto.setSubject(task.getSubject().getName());
+        taskDto.setSubject(subject.getName());
         taskDto.setStartTime(task.getStartTime());
+        if (task.getUser() != null) {
+            taskDto.setAvailability("UNAVAILABLE TO TAKE");
+        }
         taskDto.setContent(task.getContent());
+
 
         return taskDto;
     }
 
-    private Task mapDtoToTask(TaskDto taskDto){
+    public Task mapDtoToTask(TaskDto taskDto){
         Task task = new Task();
 
         Subject subject = subjectRepository.findByName(taskDto.getSubject());

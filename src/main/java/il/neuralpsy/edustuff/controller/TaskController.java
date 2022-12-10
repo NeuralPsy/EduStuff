@@ -1,9 +1,12 @@
 package il.neuralpsy.edustuff.controller;
 
 import il.neuralpsy.edustuff.dto.TaskDto;
+import il.neuralpsy.edustuff.dto.UserDto;
 import il.neuralpsy.edustuff.event.AllowedFeedEvents;
 import il.neuralpsy.edustuff.event.EventType;
 import il.neuralpsy.edustuff.event.FeedEvent;
+import il.neuralpsy.edustuff.model.Task;
+import il.neuralpsy.edustuff.model.TaskStatus;
 import il.neuralpsy.edustuff.model.User;
 import il.neuralpsy.edustuff.repository.UserRepository;
 import il.neuralpsy.edustuff.service.TaskService;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -60,6 +64,25 @@ public class TaskController {
 
 
         return "redirect:/createtask?success";
+    }
+
+    @PostMapping("/{taskId}/student/{studentId}")
+    public String takeTask(@PathVariable Integer taskId, @PathVariable Integer studentId){
+
+        User student = userRepository.findById(studentId).get();
+
+        taskService.setUserForTask(taskId, student);
+
+        FeedEvent feedEvent = new FeedEvent();
+
+        feedEvent.setEventType(EventType.TASK);
+        feedEvent.setUser(student);
+        feedEvent.setFeedDetails(AllowedFeedEvents.TAKE_TASK);
+        feedEvent.setTimestamp(LocalDateTime.now());
+        feedEvent.setEventObjectId(taskId);
+        eventPublisher.publishEvent(feedEvent);
+
+        return "redirect:/tasks?success";
     }
 
 

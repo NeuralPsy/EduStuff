@@ -62,60 +62,53 @@
     <div class="col-sm-7 col-lg-8">
       <div class="card">
         <div class="card-header">
-          <p id="feedlist" class="text-center font-weight-normal">Event list</p>
+          <p id="feedlist" class="text-center font-weight-normal">Task list</p>
         </div>
 
-        </div>
-            <div  id="feed"class="form-group mb-3">
-                <script th:inline="javascript">
+      </div>
+      <div  id="tasks"class="form-group mb-3">
+        <script th:inline="javascript">
 
+          var userEmail = [[${#authentication.name}]];
+          $.getJSON("user/email?email=" + userEmail, function (userInfo) {
+            var userId = userInfo.userId;
+            var role = userInfo.userType.name.toLowerCase();
 
-                  var userEmail = [[${#authentication.name}]];
-                  $.getJSON("user/email?email=" + userEmail, function (userInfo) {
-                    var userId = userInfo.userId;
-                    var role = userInfo.userType.name.toLowerCase();
+            $.getJSON("/task", function (subjects) {
+              $.each(subjects, function (key, t) {
 
-                    $.getJSON("/feed/" + userId + "/" + role + "/all", function (subjects) {
-                      $.each(subjects, function (key, name) {
+                let task = JSON.stringify(t);
 
-                        let itemId = name.objectId;
-                        let infoMsg = name.objectName + " WAS " + name.operationType + " BY ";
-                        infoMsg = infoMsg[0] + infoMsg.slice(1, infoMsg.length).toLowerCase();
+                var date = Date.parse(tasks.timestamp);
+                date = new Date(date);
 
-                        var date = Date.parse(name.timestamp);
-                        date = new Date(date);
-                        infoMsg.toLowerCase();
-                        $("#feed").append("<div id=\"objectboxes\" class=\"card overflow-auto\">"
-                                +"<p >" + date + "</p>"+
-                                 "<p>"+name.objectName.toLowerCase()+" "+itemId+" "+infoMsg+" "+name.userName+ "</p></div>");
+                $("#tasks").append("<form class='card overflow-auto' " +
+                        "action='/task/"+t.taskId+"/student/"+userId+"' " +
+                        "method='post'>" +
+                        "<p >" + t.taskId + "</p>" +
+                        "<p >" + t.name + "</p>" +
+                        "<p >" + t.subject + "</p>" +
+                        "<p >" + t.content + "</p>"+
+                        "<p >" + t.availability + "</p>"+
+                        (role === "student" && t.availability === "AVAILABLE TO TAKE" ? "" +
+                                "<button type='submit'>Take task</button>" : "") +
+                        "</form>");
+              })
+            });
 
-                        $("#havealook").click( function(){
-                          $.getJSON("/"+name.objectName.toLowerCase()+"/"+name.objectId, function (object){
-                            $("#objectboxes").write("<div id=\"objectbox\" class=\"card overflow-auto\">" +
-                                    "<div>" + objectName + " ID: "+objectId+"</div>" +
-                                    "<p >" + object.name + "</p>"+
-                                    "<p >" + object.user.name + "</p>"+
-                                    "<p>" + objectName + "</p></div>")
-                          })
+          });
 
-                        })
+        </script>
 
-                      })
-                    });
-
-                  });
-
-                </script>
-
-            </div>
-
-            </div>
-          </form>
-        </div>
       </div>
 
     </div>
+    </form>
   </div>
+</div>
+
+</div>
+</div>
 </div>
 </body>
 </html>

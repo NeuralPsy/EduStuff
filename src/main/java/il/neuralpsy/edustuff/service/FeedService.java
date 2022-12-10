@@ -30,7 +30,8 @@ public class FeedService {
         return feedRepository.findAllByUser_UserId(userId)
                 .stream()
                 .map(event -> mapToDto(event))
-                .collect(Collectors.toSet());
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     @EventListener
@@ -41,7 +42,9 @@ public class FeedService {
     public Collection<FeedEventDto> getStudentsFeed() {
         return feedRepository.findAllByUserUserType_Name("STUDENT")
                 .stream()
-                .map(event -> mapToDto(event)).collect(Collectors.toSet());
+                .map(event -> mapToDto(event))
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     public Collection<FeedEventDto> getAll(String role, Integer userId) {
@@ -49,13 +52,15 @@ public class FeedService {
             return feedRepository.findAllByUser_UserId(userId)
                     .stream()
                     .map(event -> mapToDto(event))
-                    .collect(Collectors.toSet());
+                    .sorted()
+                    .collect(Collectors.toList());
         }
         if (role.equalsIgnoreCase("teacher")) {
             return feedRepository.findAll()
                     .stream()
                     .map(event -> mapToDto(event))
-                    .collect(Collectors.toSet());
+                    .sorted()
+                    .collect(Collectors.toList());
         }
 
 

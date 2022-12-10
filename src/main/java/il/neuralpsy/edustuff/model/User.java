@@ -38,8 +38,6 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Task> tasks;
     @OneToMany(mappedBy = "user", orphanRemoval = true)
-    private Set<Subject> subjects;
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
     private Set<Comment> comments;
     @OneToMany(mappedBy = "user")
     private Set<FeedEvent> events;

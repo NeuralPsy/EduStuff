@@ -55,6 +55,7 @@
             <h3 class="fs-3 font-weight-normal">Available actions</h3>
             <a type="button" class="btn btn-secondary" th:href="@{/index}">Go to main page</a>
             <a type="button" class="btn btn-secondary" th:href="@{/feed}">Users events</a>
+            <a type="button" class="btn btn-secondary" th:href="@{/tasks}">Check all the task</a>
 
         </div>
         <div class="col-sm-7 col-lg-8">
@@ -124,26 +125,5 @@
         </div>
     </div>
 </div>
-<script>
-    function createTask(){
-
-        var name = $("#taskname").val();
-        var subject = $("#subject").val();
-        var content = $("#content").val();
-        var email = document.getElementById("email").innerText
-
-        $.post("/task/create?teacherEmail="+email,{
-            "name": name,
-            "subject": subject,
-            "content": content
-        }, function (response){
-            document.getElementById("creationresult").innerText = response;
-        });
-
-    }
-
-
-
-</script>
 </body>
 </html>

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Component
@@ -35,7 +36,7 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     @Transactional
     @Modifying
     @Query("update Task set user = :user, startTime = :startTime where taskId = :taskId")
-    void putUserIntoTask(@Param("user") User user, @Param("startTime") Timestamp startTime,
+    void putUserIntoTask(@Param("user") User user, @Param("startTime") LocalDateTime startTime,
                          @Param("taskId") Integer taskId);
 
     Collection<Task> getTaskByUserIsNull();
