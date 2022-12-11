@@ -8,6 +8,30 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
             integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        function setCookie(cname, cvalue, exdays) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            var expires = "expires="+d.toUTCString();
+            var sameSite = "SameSite=Lax;"
+            document.cookie = cname + "=" + cvalue + ";"+sameSite + expires + ";path=/";
+        }
+
+        function getCookie(cname) {
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for(var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return false;
+        }
+    </script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
           rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
@@ -50,6 +74,28 @@
                         document.getElementById("role").innerText = userInfo.userType.name.toLowerCase();
                         document.getElementById("birthdate").innerText = userInfo.birthdate;
                         document.getElementById("email").innerText = userInfo.email;
+
+
+                        var isCongratulated = getCookie(userInfo.userId+"-birthday");
+
+                        var dateNow = Date.now();
+                        var birth = new Date(userInfo.birthdate);
+                        var dayNow = new Date(dateNow).getDate();
+                        var monthNow = new Date(dateNow).getMonth();
+
+                        var dateMsg = monthNow+"-"+dayNow;
+
+                        var userDay = new Date(birth).getMonth()+"-"+new Date(birth).getDate();
+                        userDay.toString();
+
+
+                        if (userDay===dateMsg && isCongratulated === false) {
+                            alert("HAPPY BIRTHDAY!")
+                            setCookie(userInfo.userId+"-birthday", true, 10);
+
+                        }
+
+
                     }
                 );
             </script>
