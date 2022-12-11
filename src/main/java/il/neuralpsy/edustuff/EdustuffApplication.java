@@ -15,6 +15,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+
 @SpringBootApplication
 public class EdustuffApplication {
 
@@ -38,8 +39,8 @@ public class EdustuffApplication {
 	public CommandLineRunner loadTaskStatus(TaskStatusRepository repository) {
 		return (args) -> {
 			// save a couple of customers
-			repository.save(new TaskStatus(1, "IN_PROGRESS"));
-			repository.save(new TaskStatus(2, "REVIEW"));
+			repository.save(new TaskStatus(1, "IN PROGRESS"));
+			repository.save(new TaskStatus(2, "AVAILABLE"));
 			repository.save(new TaskStatus(3, "DONE"));
 		};
 

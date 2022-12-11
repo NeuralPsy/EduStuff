@@ -4,6 +4,7 @@ import il.neuralpsy.edustuff.dto.CommentDto;
 import il.neuralpsy.edustuff.dto.UserDto;
 import il.neuralpsy.edustuff.exception.CommentDoesntExistException;
 import il.neuralpsy.edustuff.model.Comment;
+import il.neuralpsy.edustuff.model.User;
 import il.neuralpsy.edustuff.repository.CommentRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,15 +29,12 @@ public class CommentService {
 
     public Collection<CommentDto> getAll() {
         return commentRepository.findAll().stream().map(
-                comment -> {
-                    CommentDto commentDto = modelMapper.map(comment, CommentDto.class);
-                    commentDto.setUser(modelMapper.map(comment.getUser(), UserDto.class));
-                    return commentDto;
-                }).collect(Collectors.toList());
+                comment -> mapToDto(comment))
+                .collect(Collectors.toSet());
     }
 
     public CommentDto addComment(Comment comment) {
-        return modelMapper.map(commentRepository.save(comment), CommentDto.class);
+        return mapToDto(commentRepository.save(comment));
     }
 
     public boolean removeComment(Integer commentId) {
@@ -47,11 +45,6 @@ public class CommentService {
         } return true;
     }
 
-    public boolean updateComment(CommentDto commentDto) {
-        commentRepository.updateComment(commentDto.getTimestamp(), commentDto.getText(),
-                commentDto.getCommentId());
-        return true;
-    }
 
     public Collection<CommentDto> getCommentsByTaskId(Integer taskId) {
         return commentRepository.findAllByTask_TaskId(taskId)
@@ -65,5 +58,27 @@ public class CommentService {
                 .stream()
                 .map(comment -> modelMapper.map(comment, CommentDto.class))
                 .collect(Collectors.toSet());
+    }
+
+    public CommentDto mapToDto(Comment comment){
+        UserDto userDto = modelMapper.map(comment.getUser(), UserDto.class);
+        CommentDto commentDto = new CommentDto();
+        commentDto.setCommentId(comment.getCommentId());
+        commentDto.setText(comment.getText());
+        commentDto.setUser(userDto);
+        commentDto.setTimestamp(comment.getTimestamp());
+
+        return commentDto;
+    }
+
+    public Comment mapDtoComment(CommentDto commentDto){
+        User user = modelMapper.map(commentDto.getUser(), User.class);
+        Comment comment = new Comment();
+        comment.setCommentId(commentDto.getCommentId());
+        comment.setText(commentDto.getText());
+        comment.setUser(user);
+        comment.setTimestamp(commentDto.getTimestamp());
+
+        return comment;
     }
 }

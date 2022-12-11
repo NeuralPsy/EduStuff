@@ -68,7 +68,7 @@
             <p class="fs-5">E-mail: <span id="email"></span></p>
             <script th:inline="javascript">
                 var userEmail = [[${#authentication.name}]];
-                $.getJSON("user/email?email="+userEmail, function (userInfo) {
+                $.getJSON("/user/email?email="+userEmail, function (userInfo) {
                         document.getElementById("userId").innerText = userInfo.userId;
                         document.getElementById("name").innerText = userInfo.name;
                         document.getElementById("role").innerText = userInfo.userType.name.toLowerCase();

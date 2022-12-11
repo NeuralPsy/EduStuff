@@ -12,6 +12,7 @@
           rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
           crossorigin="anonymous">
+
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -54,76 +55,70 @@
             </script>
             <h3 class="fs-3 font-weight-normal">Available actions</h3>
             <a type="button" class="btn btn-secondary" th:href="@{/index}">Go to main page</a>
-            <a type="button" class="btn btn-secondary" th:href="@{/feed}">Users events</a>
+            <a type="button" class="btn btn-secondary" th:href="@{/createtask}">Create a task</a>
             <a type="button" class="btn btn-secondary" th:href="@{/tasks}">Check all the task</a>
 
         </div>
         <div class="col-sm-7 col-lg-8">
             <div class="card">
                 <div class="card-header">
-                    <p id="creationresult" class="text-center font-weight-normal">You are about to create a task...</p>
+                    <p id="feedlist" class="text-center font-weight-normal">Task list</p>
                 </div>
-                <div th:if="${param.success}">
-                    <div class="alert alert-info">
-                        Task is created!
-                    </div>
-                </div>
-                <div class="card-body">
-                    <form
-                            method="post"
-                            role="form"
-                            th:action="@{/task/create(teacherId=${#authentication.name})}"
-                            th:object="${task}"
-                    >
 
-                        <div class="form-group mb-3">
-                            <label class="form-label">Task name</label>
-                            <input
-                                    class="form-control"
-                                    id="taskname"
-                                    name="taskname"
-                                    placeholder="Enter name of future task"
-                                    type="text"
-                                    th:field="*{name}"
-                            />
+            </div>
+            <div  id="taskInfo"class="form-group mb-3">
+                <script th:inline="javascript">
+                    var url = window.location.href;
+                    var taskId = url.split("/")[4];
 
-                        </div>
-                        <div class="form-group mb-3">
-                            <label class="form-label">Subject</label>
-                            <select class="form-control"
-                                    id="subject"
-                                    name="subject"
-                                    th:field="*{subject}">
-                                <script>
-                                $.getJSON("/subject", function (subjects) {
-                                    $.each(subjects, function (i, name) {
-                                        $("#subject").append("<option value='"+name.name+"'>" + name.name + "</option>");
-                                    })
-                                })
-                                </script>
-                            </select>
-                        </div>
+                    var userEmail = [[${#authentication.name}]];
+                    $.getJSON("/user/email?email=" + userEmail, function (userInfo) {
+                        var userId = userInfo.userId;
+                        var role = userInfo.userType.name.toLowerCase();
 
-                        <div class="form-group mb-3">
-                            <label class="form-label">Task content</label>
-                            <input
-                                    class="form-control"
-                                    th:field="*{content}"
-                                    id="content"
-                                    name="content"
-                                    placeholder="Add content for the task"
-                                    type="text" />
-                            </div>
-                        <div class="form-group">
-                            <button class="btn btn-primary" type="submit">Create</button>
+                        $.getJSON("/api/task/"+taskId, function (taskInfo) {
+                            JSON.stringify(taskInfo);
+                            var commentsJSON = $.getJSON("/api/comment/task/"+taskId);
 
-                        </div>
-                    </form>
-                </div>
+                                $("#taskInfo").append("<div class='card overflow-auto'>" +
+                                    "<p >" + taskInfo.name + "</p>" +
+                                    "<p >" + taskInfo.subject + "</p>" +
+                                    "<p >" + taskInfo.content + "</p>"+
+                                    "<p >" + taskInfo.status + "</p>");
+
+
+                            $("#taskInfo").append("<div id='postcomment' class='card overflow-auto'>" +
+                                "<p >Leave a comment</p>" +
+                                "<form " +
+                                        "method='post' " +
+                                        "role='form' " +
+                                        "action='/comment/user/"+userId+"/task/"+taskId+"' enctype='text/plain'>" +
+                                    "<input id='comment' " +
+                                            "class='form-control' " +
+                                            "name='text' " +
+                                            "required type='text' " +
+                                            "placeholder='Put text here'/>" +
+                                    "<button type='submit' class='btn btn-primary'>Post</button></form>");
+                            function postComment(){
+                                var text = "{text : "+document.getElementById("comment");
+                            }
+                        });
+
+
+
+                    });
+
+                </script>
+
             </div>
 
         </div>
+        </form>
     </div>
+</div>
+
+</div>
+</div>
 </div>
 </body>
 </html>

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("/api/comment")
 public class CommentRestController {
     private final CommentService commentService;
 
@@ -37,11 +37,6 @@ public class CommentRestController {
         return commentService.removeComment(commentId);
     }
 
-    @PutMapping
-    public boolean updateComment(@RequestBody CommentDto commentDto){
-        return commentService.updateComment(commentDto);
-    }
-
     @GetMapping("/task/{taskId}")
     public Collection<CommentDto> getCommentsByTaskId(@PathVariable Integer taskId){
         return commentService.getCommentsByTaskId(taskId);
@@ -51,4 +46,6 @@ public class CommentRestController {
     public Collection<CommentDto> getCommentsByUserId(@PathVariable Integer userId){
         return commentService.getCommentsByUserId(userId);
     }
+
+
 }

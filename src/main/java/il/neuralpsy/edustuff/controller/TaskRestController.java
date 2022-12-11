@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/task")
+@RequestMapping("/api/task")
 public class TaskRestController {
 
     private final TaskService taskService;
@@ -46,7 +46,6 @@ public class TaskRestController {
 
     @GetMapping("/{taskId}")
     public TaskDto getTaskById(@PathVariable Integer taskId){
-
 
         return taskService.getTaskById(taskId);
     }

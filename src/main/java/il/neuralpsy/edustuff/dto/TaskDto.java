@@ -12,10 +12,10 @@ public class TaskDto implements Comparable<TaskDto>{
     private String name;
     private String content;
     private String subject;
-    private String availability = "AVAILABLE TO TAKE";
+    private String status = "AVAILABLE";
 
     private LocalDateTime startTime;
-    private TaskStatus taskStatus;
+
 
     @Override
     public int compareTo(TaskDto o) {

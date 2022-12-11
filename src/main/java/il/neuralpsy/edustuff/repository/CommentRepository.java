@@ -15,13 +15,6 @@ import java.util.Collection;
 @Component
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
-    @Transactional
-    @Modifying
-    @Query("update Comment set timestamp = :timeStamp,text = :text where commentId = :commentId")
-    void updateComment(@Param("timeStamp") LocalDateTime timestamp, @Param("text") String text,
-                       @Param("commentId") Integer commentId);
-
-
     Collection<Comment> findAllByTask_TaskId(Integer taskId);
 
     Collection<Comment> findAllByUser_UserId(Integer userId);

@@ -1,46 +1,85 @@
 package il.neuralpsy.edustuff.controller;
 
 import il.neuralpsy.edustuff.dto.CommentDto;
+import il.neuralpsy.edustuff.dto.UserDto;
 import il.neuralpsy.edustuff.event.AllowedFeedEvents;
 import il.neuralpsy.edustuff.event.EventType;
 import il.neuralpsy.edustuff.event.FeedEvent;
 import il.neuralpsy.edustuff.model.Comment;
+import il.neuralpsy.edustuff.model.Task;
+import il.neuralpsy.edustuff.model.User;
+import il.neuralpsy.edustuff.repository.TaskRepository;
+import il.neuralpsy.edustuff.repository.UserRepository;
 import il.neuralpsy.edustuff.service.CommentService;
+import il.neuralpsy.edustuff.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Controller
 @RequestMapping("/comment")
+@Slf4j
 public class CommentController {
     private final CommentService commentService;
+    private final UserService userService;
+
+    private final UserRepository userRepository;
+
+    private final TaskRepository taskRepository;
 
     private final ApplicationEventPublisher eventPublisher;
 
 
     @Autowired
-    public CommentController(CommentService commentService, ApplicationEventPublisher eventPublisher){
+    public CommentController(CommentService commentService, ApplicationEventPublisher eventPublisher,
+                             UserService userService, UserRepository userRepository, TaskRepository taskRepository){
         this.commentService = commentService;
         this.eventPublisher = eventPublisher;
+        this.userService = userService;
+        this.userRepository = userRepository;
+        this.taskRepository = taskRepository;
     }
 
 
-    @PostMapping
-    public CommentDto addComment(@ModelAttribute("comment") Comment comment){
+    @PostMapping("/user/{userId}/task/{taskId}")
+    public String addComment(@RequestBody String text, @PathVariable Integer userId,
+                             @PathVariable Integer taskId, BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            return "tasktempl";
+        }
 
-        CommentDto commentDto = commentService.addComment(comment);
+        Comment comment = new Comment();
+        text = text.substring(0, text.length()-1).replace("text=", "");
+
+        comment.setText(text);
+
+        User user = userRepository.findById(userId).get();
+        Task task = taskRepository.findById(taskId).get();
+
+
+        comment.setUser(user);
+        comment.setTask(task);
+        comment.setTimestamp(LocalDateTime.now());
+
+        Integer commentId = commentService.addComment(comment).getCommentId();
         FeedEvent feedEvent = new FeedEvent();
 
         feedEvent.setEventType(EventType.COMMENT);
-        feedEvent.setUser(comment.getUser());
+        feedEvent.setUser(user);
+        feedEvent.setEventObjectId(commentId);
         feedEvent.setFeedDetails(AllowedFeedEvents.ADD_COMMENT);
         feedEvent.setTimestamp(comment.getTimestamp());
 
         eventPublisher.publishEvent(feedEvent);
-        return commentDto;
+        return "redirect:/task/{taskId}?success";
     }
 
 }

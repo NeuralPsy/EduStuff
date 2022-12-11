@@ -9,11 +9,16 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Data
-public class CommentDto {
+public class CommentDto implements Comparable<CommentDto>{
     @Id
     @GeneratedValue
     private Integer commentId;
     private UserDto user;
     private String text;
     private LocalDateTime timestamp;
+
+    @Override
+    public int compareTo(CommentDto o) {
+        return o.timestamp.compareTo(this.timestamp);
+    }
 }

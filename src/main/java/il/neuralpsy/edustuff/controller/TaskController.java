@@ -1,5 +1,6 @@
 package il.neuralpsy.edustuff.controller;
 
+import il.neuralpsy.edustuff.dto.CommentDto;
 import il.neuralpsy.edustuff.dto.TaskDto;
 import il.neuralpsy.edustuff.dto.UserDto;
 import il.neuralpsy.edustuff.event.AllowedFeedEvents;
@@ -10,6 +11,7 @@ import il.neuralpsy.edustuff.model.TaskStatus;
 import il.neuralpsy.edustuff.model.User;
 import il.neuralpsy.edustuff.repository.UserRepository;
 import il.neuralpsy.edustuff.service.TaskService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
@@ -24,6 +26,7 @@ import java.util.Collection;
 
 @Controller
 @RequestMapping("/task")
+@Slf4j
 public class TaskController {
 
     private final TaskService taskService;
@@ -85,6 +88,12 @@ public class TaskController {
         return "redirect:/tasks?success";
     }
 
+    @GetMapping("/{taskId}")
+    public String getTaskInfo(Model model){
+        log.info("You are in Task Controller getting task info");
+
+        return "tasktempl";
+    }
 
 
 }

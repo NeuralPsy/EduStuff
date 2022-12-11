@@ -16,13 +16,9 @@ import java.util.Set;
 @Data
 public class UserDto {
     private Integer userId;
-    @Size(min = 1, max = 200, message = "this field may not contain more than 200 symbols")
-    @NotEmpty
     private String name;
-    @Email
     private String email;
     private UserType userType;
     private LocalDate birthdate;
-//    private String password;
 
 }

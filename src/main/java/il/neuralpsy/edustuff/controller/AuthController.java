@@ -3,7 +3,6 @@ package il.neuralpsy.edustuff.controller;
 import il.neuralpsy.edustuff.dto.TaskDto;
 import il.neuralpsy.edustuff.dto.UserRegistrationDto;
 import il.neuralpsy.edustuff.service.UserService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,25 +26,21 @@ public class AuthController {
 
     @GetMapping("/index")
     public String home(){
-        log.info("Index page request");
         return "index";
     }
 
     @GetMapping("/tasks")
     public String tasks(){
-        log.info("Task page request");
         return "tasks";
     }
 
     @GetMapping("/feed")
     public String feed(){
-        log.info("Feed page request");
         return "feed";
     }
 
     @GetMapping("/createtask")
     public String createTask(Model model){
-        log.info("Create task page request");
         TaskDto taskDto = new TaskDto();
         model.addAttribute("task", taskDto);
         return "createtask";
@@ -53,7 +48,6 @@ public class AuthController {
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model){
-        log.info("Show registration form");
         UserRegistrationDto user = new UserRegistrationDto();
         model.addAttribute("user", user);
         return "register";
@@ -67,13 +61,11 @@ public class AuthController {
         boolean doesExist = userService.checkEmailExistence(userRegistrationDto.getEmail());
 
         if(doesExist){
-            log.info("Can not add user");
             result.rejectValue("email", null,
-                    "There is already an account registered with the same email");
+                    "There is an account already registered with the same email");
         }
 
         if(result.hasErrors()){
-            log.info("There's some errors");
             model.addAttribute("user", userRegistrationDto);
             return "register";
         }
