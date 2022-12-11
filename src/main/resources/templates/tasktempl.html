@@ -78,7 +78,7 @@
 
                         $.getJSON("/api/task/"+taskId, function (taskInfo) {
                             JSON.stringify(taskInfo);
-                            var commentsJSON = $.getJSON("/api/comment/task/"+taskId);
+
 
                                 $("#taskInfo").append("<div class='card overflow-auto'>" +
                                     "<p >" + taskInfo.name + "</p>" +
@@ -99,9 +99,22 @@
                                             "required type='text' " +
                                             "placeholder='Put text here'/>" +
                                     "<button type='submit' class='btn btn-primary'>Post</button></form>");
-                            function postComment(){
-                                var text = "{text : "+document.getElementById("comment");
-                            }
+
+                            $.getJSON("/api/comment/task/"+taskId, function(comments){
+                                $.each(comments, function (key, com){
+                                    JSON.stringify(com);
+
+                                    var date = Date.parse(com.timestamp);
+                                    date = new Date(date);
+
+                                    $("#taskInfo").append("<div class='card overflow-auto'>" +
+                                        "<p >" + date + "</p>" +
+                                        "<p >" + com.user.name + "</p>" +
+                                        "<p >" + com.text + "</p></div>");
+
+                                })
+                            })
+
                         });
 
 
