@@ -75,10 +75,6 @@ public class TaskRestController {
     }
 
 
-    @DeleteMapping("/{taskId}")
-    public boolean removeTask(@PathVariable Integer taskId){
-        return taskService.removeTask(taskId);
-    }
 
 
 

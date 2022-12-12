@@ -95,5 +95,26 @@ public class TaskController {
         return "tasktempl";
     }
 
+    @DeleteMapping("/makedone/{taskId}/user/{userId}")
+    public String removeTask(@PathVariable Integer taskId, @PathVariable Integer userId){
+        taskService.removeTask(taskId);
+
+        User user = userRepository.findById(userId).get();
+
+
+        FeedEvent feedEvent = new FeedEvent();
+
+        feedEvent.setEventType(EventType.TASK);
+        feedEvent.setUser(user);
+        feedEvent.setFeedDetails(AllowedFeedEvents.DELETE_TASK);
+        feedEvent.setTimestamp(LocalDateTime.now());
+        feedEvent.setEventObjectId(taskId);
+        eventPublisher.publishEvent(feedEvent);
+
+
+        return "tasktempl";
+    }
+
+
 
 }

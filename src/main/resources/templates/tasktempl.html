@@ -68,13 +68,29 @@
             </div>
             <div  id="taskInfo"class="form-group mb-3">
                 <script th:inline="javascript">
+
                     var url = window.location.href;
                     var taskId = url.split("/")[4];
+
+                    function makeTaskDone(userId){
+                        $.ajax({
+                            url: "/task/makedone/"+taskId+"/user/"+userId,
+                            type: 'DELETE',
+                            success: function(result){
+                                window.location.assign("/tasks")
+                            }
+                        });
+                    };
+
+
+
 
                     var userEmail = [[${#authentication.name}]];
                     $.getJSON("/user/email?email=" + userEmail, function (userInfo) {
                         var userId = userInfo.userId;
                         var role = userInfo.userType.name.toLowerCase();
+
+
 
                         $.getJSON("/api/task/"+taskId, function (taskInfo) {
                             JSON.stringify(taskInfo);
@@ -87,8 +103,10 @@
                                     "<p >" + taskInfo.status + "</p>");
 
 
+
+
                             $("#taskInfo").append("<div id='postcomment' class='card overflow-auto'>" +
-                                "<p >Leave a comment</p>" +
+                                "<p >Leave a comment</p>"+
                                 "<form " +
                                         "method='post' " +
                                         "role='form' " +
@@ -99,6 +117,10 @@
                                             "required type='text' " +
                                             "placeholder='Put text here'/>" +
                                     "<button type='submit' class='btn btn-primary'>Post</button></form>");
+                            if (role === "teacher"){
+                                $("#taskInfo").append("<button type='button' onclick='makeTaskDone("+userId+")'>Good!</button>");
+
+                            }
 
                             $.getJSON("/api/comment/task/"+taskId, function(comments){
                                 $.each(comments, function (key, com){

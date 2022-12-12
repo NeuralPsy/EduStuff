@@ -95,7 +95,6 @@
 
                         }
 
-
                     }
                 );
             </script>
@@ -106,7 +105,54 @@
 
         </div>
         <div class="col-sm-7 col-lg-8">
-          <h3>Events</h3>
+            <div class="card">
+                <div class="card-header">
+                    <p id="feedlist" class="text-center font-weight-normal">Event list</p>
+                </div>
+
+            </div>
+            <div  id="feed"class="form-group mb-3 overflow-auto">
+                <script th:inline="javascript">
+
+
+                    var userEmail = [[${#authentication.name}]];
+                    $.getJSON("user/email?email=" + userEmail, function (userInfo) {
+                        var userId = userInfo.userId;
+                        var role = userInfo.userType.name.toLowerCase();
+
+                        $.getJSON("/feed/" + userId + "/" + role + "/all", function (subjects) {
+                            $.each(subjects, function (key, name) {
+
+                                let itemId = name.objectId;
+                                let infoMsg = name.objectName + " WAS " + name.operationType + " BY ";
+                                infoMsg = infoMsg[0] + infoMsg.slice(1, infoMsg.length).toLowerCase();
+
+                                var date = Date.parse(name.timestamp);
+                                date = new Date(date);
+                                infoMsg.toLowerCase();
+                                $("#feed").append("<div id='objectboxes' class='card overflow-auto'>"
+                                    +"<p >" + date + "</p>"+
+                                    "<p>"+name.objectName.toLowerCase()+" "+itemId+" "+infoMsg+" "+name.userName+ "</p></div>");
+
+                                $("#havealook").click( function(){
+                                    $.getJSON("/"+name.objectName.toLowerCase()+"/"+name.objectId, function (object){
+                                        $("#objectboxes").write("<div id='objectbox' class='card'>" +
+                                            "<div>" + objectName + " ID: "+objectId+"</div>" +
+                                            "<p >" + object.name + "</p>"+
+                                            "<p >" + object.user.name + "</p>"+
+                                            "<p>" + objectName + "</p></div>")
+                                    })
+
+                                })
+
+                            })
+                        });
+
+                    });
+
+                </script>
+
+            </div>
 
         </div>
     </div>

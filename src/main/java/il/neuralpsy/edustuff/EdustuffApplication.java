@@ -41,7 +41,6 @@ public class EdustuffApplication {
 			// save a couple of customers
 			repository.save(new TaskStatus(1, "IN PROGRESS"));
 			repository.save(new TaskStatus(2, "AVAILABLE"));
-			repository.save(new TaskStatus(3, "DONE"));
 		};
 
 

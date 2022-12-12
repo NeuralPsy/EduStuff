@@ -31,7 +31,7 @@ public class Task {
     @OneToOne
     @JoinColumn(referencedColumnName = "taskStatusId")
     private TaskStatus taskStatus;
-    @OneToMany(mappedBy = "task")
+    @OneToMany(mappedBy = "task", cascade = CascadeType.REMOVE)
     private Set<Comment> comments;
 
 }
