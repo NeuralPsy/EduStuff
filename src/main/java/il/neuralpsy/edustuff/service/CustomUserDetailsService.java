@@ -18,16 +18,13 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
 
         User user = userRepository.findUserByEmail(usernameOrEmail).get();
-        if(user != null){
-            return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
-                    Collections.singletonList(
-                            new SimpleGrantedAuthority(user.getUserType().getName())));
-        } else {
-            throw new UsernameNotFoundException("Invalid email or password");
-        }
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
+                Collections.singletonList(
+                        new SimpleGrantedAuthority(user.getUserType().getName())));
     }
 }

@@ -1,4 +1,18 @@
 <!DOCTYPE html>
+<!--suppress SpellCheckingInspection, SpellCheckingInspection -->
+llCheckingInspection -->
+llCheckingInspection -->
+llCheckingInspection -->
+llCheckingInspection -->
+llCheckingInspection -->
+llCheckingInspection -->
+llCheckingInspection -->
+llCheckingInspection -->
+llCheckingInspection -->
+llCheckingInspection -->
+llCheckingInspection -->
+llCheckingInspection -->
+llCheckingInspection -->
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
 >
@@ -41,8 +55,9 @@
             <p class="fs-5">Role: <span id="role"></span></p>
             <p class="fs-5">Birthdate: <span id="birthdate"></span></p>
             <p class="fs-5">E-mail: <span id="email"></span></p>
+            <!--suppress JSUnresolvedVariable, JSUnresolvedVariable -->
             <script th:inline="javascript">
-                var userEmail = [[${#authentication.name}]];
+                const userEmail = [[${#authentication.name}]];
                 $.getJSON("/user/email?email=" + userEmail, function (userInfo) {
                         document.getElementById("userId").innerText = userInfo.userId;
                         document.getElementById("name").innerText = userInfo.name;

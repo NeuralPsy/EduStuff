@@ -11,12 +11,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
+@SuppressWarnings("SpellCheckingInspection")
 @Controller
 @RequestMapping("/task")
 @Slf4j
@@ -36,6 +36,7 @@ public class TaskController {
 
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @PostMapping("/create")
     public String createTask(@ModelAttribute("task") TaskDto taskDto,
                              @RequestParam String teacherId, BindingResult bindingResult){
@@ -62,6 +63,7 @@ public class TaskController {
         return "redirect:/createtask?success";
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @PostMapping("/{taskId}/student/{studentId}")
     public String takeTask(@PathVariable Integer taskId, @PathVariable Integer studentId){
 
@@ -88,6 +90,7 @@ public class TaskController {
         return "tasktempl";
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @DeleteMapping("/makedone/{taskId}/user/{userId}")
     public String removeTask(@PathVariable Integer taskId, @PathVariable Integer userId){
         taskService.removeTask(taskId);

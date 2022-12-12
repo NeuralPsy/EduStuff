@@ -3,8 +3,6 @@ package il.neuralpsy.edustuff.service;
 import il.neuralpsy.edustuff.dto.FeedEventDto;
 import il.neuralpsy.edustuff.event.*;
 import il.neuralpsy.edustuff.repository.FeedRepository;
-import il.neuralpsy.edustuff.repository.UserRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -25,7 +23,7 @@ public class FeedService {
     public Collection<FeedEventDto> getUserFeed(final Integer userId) {
         return feedRepository.findAllByUser_UserId(userId)
                 .stream()
-                .map(event -> mapToDto(event))
+                .map(this::mapToDto)
                 .sorted()
                 .collect(Collectors.toList());
     }
@@ -35,26 +33,18 @@ public class FeedService {
         feedRepository.save(event);
     }
 
-    public Collection<FeedEventDto> getStudentsFeed() {
-        return feedRepository.findAllByUserUserType_Name("STUDENT")
-                .stream()
-                .map(event -> mapToDto(event))
-                .sorted()
-                .collect(Collectors.toList());
-    }
-
     public Collection<FeedEventDto> getAll(String role, Integer userId) {
         if (role.equalsIgnoreCase("student")) {
             return feedRepository.findAllByUser_UserId(userId)
                     .stream()
-                    .map(event -> mapToDto(event))
+                    .map(this::mapToDto)
                     .sorted()
                     .collect(Collectors.toList());
         }
         if (role.equalsIgnoreCase("teacher")) {
             return feedRepository.findAll()
                     .stream()
-                    .map(event -> mapToDto(event))
+                    .map(this::mapToDto)
                     .sorted()
                     .collect(Collectors.toList());
         }
@@ -63,7 +53,7 @@ public class FeedService {
 
         return feedRepository.findAll()
                 .stream()
-                .map(event -> mapToDto(event))
+                .map(this::mapToDto)
                 .collect(Collectors.toList());
     }
 

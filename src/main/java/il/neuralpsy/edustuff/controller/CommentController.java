@@ -9,7 +9,6 @@ import il.neuralpsy.edustuff.model.User;
 import il.neuralpsy.edustuff.repository.TaskRepository;
 import il.neuralpsy.edustuff.repository.UserRepository;
 import il.neuralpsy.edustuff.service.CommentService;
-import il.neuralpsy.edustuff.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
+@SuppressWarnings("OptionalGetWithoutIsPresent")
 @Controller
 @RequestMapping("/comment")
 @Slf4j
@@ -42,10 +42,12 @@ public class CommentController {
     }
 
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @PostMapping("/user/{userId}/task/{taskId}")
     public String addComment(@RequestBody String text, @PathVariable Integer userId,
                              @PathVariable Integer taskId, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
+            //noinspection SpellCheckingInspection
             return "tasktempl";
         }
 
@@ -54,7 +56,7 @@ public class CommentController {
 
         comment.setText(text);
 
-        User user = userRepository.findById(userId).get();
+        @SuppressWarnings("OptionalGetWithoutIsPresent") User user = userRepository.findById(userId).get();
         Task task = taskRepository.findById(taskId).get();
 
 

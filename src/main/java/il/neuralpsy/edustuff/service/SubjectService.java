@@ -4,7 +4,6 @@ import il.neuralpsy.edustuff.dto.SubjectDto;
 import il.neuralpsy.edustuff.exception.SubjectDoesntExistException;
 import il.neuralpsy.edustuff.model.Subject;
 import il.neuralpsy.edustuff.repository.SubjectRepository;
-import il.neuralpsy.edustuff.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -32,6 +31,7 @@ public class SubjectService {
                 .collect(Collectors.toList());
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     public SubjectDto getSubjectById(Integer subjectId) {
         return modelMapper.map(subjectRepository.findById(subjectId).get(), SubjectDto.class);
     }

@@ -57,6 +57,7 @@ public class UserService {
         return mapUserToDto(userRepository.save(user));
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     public UserDto getUserById(Integer userId) {
         try {
             return mapUserToDto(userRepository.findById(userId).get());
@@ -65,6 +66,7 @@ public class UserService {
         }
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     public UserDto findUserByEmail(String email) {
         return mapUserToDto(userRepository.findUserByEmail(email).get());
     }
@@ -84,12 +86,12 @@ public class UserService {
     }
 
     public Collection<UserDto> getAll() {
-        return userRepository.findAll().stream().map(user -> mapUserToDto(user))
+        return userRepository.findAll().stream().map(this::mapUserToDto)
                 .collect(Collectors.toList());
     }
 
     public Collection<UserDto> getAllByUserType(Integer userTypeId) {
-        return userRepository.findAllByUserType_UserTypeId(userTypeId).stream().map(user -> mapUserToDto(user))
+        return userRepository.findAllByUserType_UserTypeId(userTypeId).stream().map(this::mapUserToDto)
                 .collect(Collectors.toList());
     }
 

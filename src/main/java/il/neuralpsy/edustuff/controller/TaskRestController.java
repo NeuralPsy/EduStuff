@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+@SuppressWarnings("SpellCheckingInspection")
 @RestController
 @RequestMapping("/api/task")
 public class TaskRestController {
@@ -52,6 +53,7 @@ public class TaskRestController {
 
 
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @PutMapping("/update/{updatorId}")
     public boolean updateTask(@RequestBody TaskDto taskDto, @PathVariable Integer updatorId){
 

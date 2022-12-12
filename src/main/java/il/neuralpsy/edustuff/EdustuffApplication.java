@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 
+@SuppressWarnings("SpellCheckingInspection")
 @SpringBootApplication
 public class EdustuffApplication {
 

@@ -4,7 +4,6 @@ import il.neuralpsy.edustuff.dto.CommentDto;
 import il.neuralpsy.edustuff.dto.UserDto;
 import il.neuralpsy.edustuff.exception.CommentDoesntExistException;
 import il.neuralpsy.edustuff.model.Comment;
-import il.neuralpsy.edustuff.model.User;
 import il.neuralpsy.edustuff.repository.CommentRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,7 @@ public class CommentService {
 
     public Collection<CommentDto> getAll() {
         return commentRepository.findAll().stream().map(
-                comment -> mapToDto(comment))
+                        this::mapToDto)
                 .collect(Collectors.toSet());
     }
 
@@ -71,14 +70,4 @@ public class CommentService {
         return commentDto;
     }
 
-    public Comment mapDtoComment(CommentDto commentDto){
-        User user = modelMapper.map(commentDto.getUser(), User.class);
-        Comment comment = new Comment();
-        comment.setCommentId(commentDto.getCommentId());
-        comment.setText(commentDto.getText());
-        comment.setUser(user);
-        comment.setTimestamp(commentDto.getTimestamp());
-
-        return comment;
-    }
 }

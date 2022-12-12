@@ -47,10 +47,11 @@ public class TaskService {
     }
 
     public Collection<TaskDto> getAll() {
-        return taskRepository.findAll().stream().map(task -> mapTaskToDto(task))
+        return taskRepository.findAll().stream().map(this::mapTaskToDto)
                 .collect(Collectors.toSet());
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     public TaskDto getTaskById(Integer taskId) {
         TaskDto taskDto;
         try {
@@ -66,7 +67,7 @@ public class TaskService {
         if (!isValid) throw new UserDoesntExistException("There's no user with ID "+userId);
         return taskRepository.findTasksByUser_UserId(userId)
                 .stream()
-                .map(task -> mapTaskToDto(task))
+                .map(this::mapTaskToDto)
                 .collect(Collectors.toSet());
     }
 
@@ -84,6 +85,7 @@ public class TaskService {
         return true;
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     public boolean setUserForTask(Integer taskId, User student) {
         LocalDateTime timestamp = LocalDateTime.now();
         taskRepository.putUserIntoTask(student, timestamp, taskId);
