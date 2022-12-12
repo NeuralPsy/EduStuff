@@ -21,7 +21,8 @@ public class ErrorHandler {
             UserDoesntExistException.class,
             UserEmailDoesntExistException.class,
             TaskDoesntExistException.class,
-            CommentDoesntExistException.class})
+            CommentDoesntExistException.class,
+            TaskStatusIsNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFound(final RuntimeException e){
         return new ErrorResponse(e.getMessage());

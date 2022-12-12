@@ -55,7 +55,7 @@ public class TaskRestController {
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     @PutMapping("/update/{updatorId}")
-    public boolean updateTask(@RequestBody TaskDto taskDto, @PathVariable Integer updatorId){
+    public Integer updateTask(@RequestBody TaskDto taskDto, @PathVariable Integer updatorId){
 
         User user = userRepository.findById(updatorId).get();
 
@@ -68,7 +68,9 @@ public class TaskRestController {
         feedEvent.setEventObjectId(taskDto.getTaskId());
         eventPublisher.publishEvent(feedEvent);
 
-        return taskService.updateTask(taskDto);
+        taskService.updateTask(taskDto);
+
+        return taskDto.getTaskId();
     }
 
 

@@ -13,15 +13,15 @@
         function setCookie(cname, cvalue, exdays) {
             var d = new Date();
             d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-            var expires = "expires="+d.toUTCString();
+            var expires = "expires=" + d.toUTCString();
             var sameSite = "SameSite=Lax;"
-            document.cookie = cname + "=" + cvalue + ";"+sameSite + expires + ";path=/";
+            document.cookie = cname + "=" + cvalue + ";" + sameSite + expires + ";path=/";
         }
 
         function getCookie(cname) {
             var name = cname + "=";
             var ca = document.cookie.split(';');
-            for(var i = 0; i < ca.length; i++) {
+            for (var i = 0; i < ca.length; i++) {
                 var c = ca[i];
                 while (c.charAt(0) == ' ') {
                     c = c.substring(1);
@@ -56,20 +56,20 @@
         </div>
     </div>
 </nav>
-<br /><br />
+<br/><br/>
 <div class="container">
     <div class="row">
         <h1 class="text-center"> Education Stuff - Just tasks and comments </h1>
         <div id="userinfo" class="col-sm-5 col-lg-3">
             <p class="fs-3">User's details</p>
-            <p class="fs-5">ID: <span id="userId"></span ></p>
+            <p class="fs-5">ID: <span id="userId"></span></p>
             <p class="fs-5">Name: <span id="name"></span></p>
             <p class="fs-5">Role: <span id="role"></span></p>
             <p class="fs-5">Birthdate: <span id="birthdate"></span></p>
             <p class="fs-5">E-mail: <span id="email"></span></p>
             <script th:inline="javascript">
                 var userEmail = [[${#authentication.name}]];
-                $.getJSON("/user/email?email="+userEmail, function (userInfo) {
+                $.getJSON("/user/email?email=" + userEmail, function (userInfo) {
                         document.getElementById("userId").innerText = userInfo.userId;
                         document.getElementById("name").innerText = userInfo.name;
                         document.getElementById("role").innerText = userInfo.userType.name.toLowerCase();
@@ -77,22 +77,22 @@
                         document.getElementById("email").innerText = userInfo.email;
 
 
-                        var isCongratulated = getCookie(userInfo.userId+"-birthday");
+                        var isCongratulated = getCookie(userInfo.userId + "-birthday");
 
                         var dateNow = Date.now();
                         var birth = new Date(userInfo.birthdate);
                         var dayNow = new Date(dateNow).getDate();
                         var monthNow = new Date(dateNow).getMonth();
 
-                        var dateMsg = monthNow+"-"+dayNow;
+                        var dateMsg = monthNow + "-" + dayNow;
 
-                        var userDay = new Date(birth).getMonth()+"-"+new Date(birth).getDate();
+                        var userDay = new Date(birth).getMonth() + "-" + new Date(birth).getDate();
                         userDay.toString();
 
 
-                        if (userDay===dateMsg && isCongratulated === false) {
+                        if (userDay === dateMsg && isCongratulated === false) {
                             alert("HAPPY BIRTHDAY!")
-                            setCookie(userInfo.userId+"-birthday", true, 10);
+                            setCookie(userInfo.userId + "-birthday", true, 10);
 
                         }
 
@@ -112,7 +112,7 @@
                 </div>
 
             </div>
-            <div  id="feed" class="form-group mb-3 overflow-auto">
+            <div id="feed" class="form-group mb-3 overflow-auto">
                 <script th:inline="javascript">
 
 
@@ -132,15 +132,15 @@
                                 date = new Date(date);
                                 infoMsg.toLowerCase();
                                 $("#feed").append("<div id='objectboxes' class='card overflow-auto'>"
-                                    +"<p >" + date + "</p>"+
-                                    "<p>"+name.objectName.toLowerCase()+" "+itemId+" "+infoMsg+" "+name.userName+ "</p></div>");
+                                    + "<p >" + date + "</p>" +
+                                    "<p>" + name.objectName.toLowerCase() + " " + itemId + " " + infoMsg + " " + name.userName + "</p></div>");
 
-                                $("#havealook").click( function(){
-                                    $.getJSON("/"+name.objectName.toLowerCase()+"/"+name.objectId, function (object){
+                                $("#havealook").click(function () {
+                                    $.getJSON("/" + name.objectName.toLowerCase() + "/" + name.objectId, function (object) {
                                         $("#objectboxes").write("<div id='objectbox' class='card'>" +
-                                            "<div>" + objectName + " ID: "+objectId+"</div>" +
-                                            "<p >" + object.name + "</p>"+
-                                            "<p >" + object.user.name + "</p>"+
+                                            "<div>" + objectName + " ID: " + objectId + "</div>" +
+                                            "<p >" + object.name + "</p>" +
+                                            "<p >" + object.user.name + "</p>" +
                                             "<p>" + objectName + "</p></div>")
                                     })
 

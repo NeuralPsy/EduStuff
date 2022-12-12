@@ -27,17 +27,10 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
 
     @Transactional
     @Modifying
-    @Query("update Task set name = :name, startTime = :startTime, taskStatus = :taskStatus where taskId = :taskId")
-    void updateTask(@Param("name") String name, @Param("startTime") Timestamp startTime,
-                    @Param("taskStatus") TaskStatus taskStatus, @Param("taskId") Integer taskId);
-
-    @Transactional
-    @Modifying
     @Query("update Task set user = :user, startTime = :startTime where taskId = :taskId")
     void putUserIntoTask(@Param("user") User user, @Param("startTime") LocalDateTime startTime,
                          @Param("taskId") Integer taskId);
 
-    Collection<Task> getTaskByUserIsNull();
     @Transactional
     @Modifying
     @Query("update Task set taskStatus = :taskStatus, startTime = :startTime where taskId = :taskId")

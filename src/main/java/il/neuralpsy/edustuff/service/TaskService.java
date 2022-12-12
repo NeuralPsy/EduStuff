@@ -2,6 +2,7 @@ package il.neuralpsy.edustuff.service;
 
 import il.neuralpsy.edustuff.dto.TaskDto;
 import il.neuralpsy.edustuff.exception.TaskDoesntExistException;
+import il.neuralpsy.edustuff.exception.TaskStatusIsNotFoundException;
 import il.neuralpsy.edustuff.exception.UserDoesntExistException;
 import il.neuralpsy.edustuff.model.Subject;
 import il.neuralpsy.edustuff.model.Task;
@@ -71,26 +72,27 @@ public class TaskService {
                 .collect(Collectors.toSet());
     }
 
-    public boolean updateTask(TaskDto taskDto) {
+    public void updateTask(TaskDto taskDto) {
         Task task = mapDtoToTask(taskDto);
         taskRepository.updateTaskStatus(task.getTaskStatus(), task.getTaskId());
-        return true;
     }
 
-    public boolean removeTask(Integer taskId) {
-        boolean isValid = taskRepository.existsById(taskId);
-        if (!isValid) throw new TaskDoesntExistException("There's no task with ID "+taskId);
-
+    public void removeTask(Integer taskId) {
+        if (!taskRepository.existsById(taskId))
+            throw new TaskDoesntExistException("There's no task with ID "+taskId);
         taskRepository.deleteById(taskId);
-        return true;
     }
 
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
-    public boolean setUserForTask(Integer taskId, User student) {
+    public void setUserForTask(Integer taskId, User student) {
         LocalDateTime timestamp = LocalDateTime.now();
         taskRepository.putUserIntoTask(student, timestamp, taskId);
-        taskRepository.setTaskStatus(statusRepository.findById(1).get(), timestamp, taskId);
-        return true;
+        TaskStatus status;
+        if (statusRepository.findById(1).isPresent()){
+            status = statusRepository.findById(1).get();
+        } else {
+            throw new TaskStatusIsNotFoundException("Task status is not found id database");
+        }
+        taskRepository.setTaskStatus(status, timestamp, taskId);
     }
 
 

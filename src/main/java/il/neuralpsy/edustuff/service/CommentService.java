@@ -36,12 +36,12 @@ public class CommentService {
         return mapToDto(commentRepository.save(comment));
     }
 
-    public boolean removeComment(Integer commentId) {
+    public void removeComment(Integer commentId) {
         try {
             commentRepository.deleteById(commentId);
         } catch (EmptyResultDataAccessException e){
             throw new CommentDoesntExistException("There is no comment with ID " + commentId);
-        } return true;
+        }
     }
 
 

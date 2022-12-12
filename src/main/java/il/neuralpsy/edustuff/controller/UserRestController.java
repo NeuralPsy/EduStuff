@@ -29,13 +29,15 @@ public class UserRestController {
     }
 
     @PutMapping
-    public boolean updateUser(@RequestBody UserDto userDto){
-        return service.updateUser(userDto);
+    public Integer updateUser(@RequestBody UserDto userDto){
+        service.updateUser(userDto);
+        return userDto.getUserId();
     }
 
     @DeleteMapping("/{userId}")
-    public boolean removeUser(@PathVariable Integer userId){
-        return service.removeUser(userId);
+    public Integer removeUser(@PathVariable Integer userId){
+        service.removeUser(userId);
+        return userId;
     }
 
     @GetMapping

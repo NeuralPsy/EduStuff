@@ -25,8 +25,9 @@ public class CommentRestController {
 
 
     @DeleteMapping("/{commentId}")
-    public boolean removeComment(@PathVariable Integer commentId){
-        return commentService.removeComment(commentId);
+    public Integer removeComment(@PathVariable Integer commentId){
+        commentService.removeComment(commentId);
+        return commentId;
     }
 
     @GetMapping("/task/{taskId}")

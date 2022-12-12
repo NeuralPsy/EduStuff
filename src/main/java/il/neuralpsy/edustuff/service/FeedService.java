@@ -20,14 +20,6 @@ public class FeedService {
         this.feedRepository = feedRepository;
     }
 
-    public Collection<FeedEventDto> getUserFeed(final Integer userId) {
-        return feedRepository.findAllByUser_UserId(userId)
-                .stream()
-                .map(this::mapToDto)
-                .sorted()
-                .collect(Collectors.toList());
-    }
-
     @EventListener
     public void handleOnFeedEvent(FeedEvent event) {
         feedRepository.save(event);

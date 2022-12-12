@@ -38,7 +38,7 @@ public class UserService {
 
     }
 
-    public UserDto addUser(UserRegistrationDto userRegistrationDto) {
+    public void addUser(UserRegistrationDto userRegistrationDto) {
         log.info("Adding new user");
         User user = new User();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -54,7 +54,7 @@ public class UserService {
         user.setBirthdate(birthdate);
         log.info("Setting password");
         user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
-        return mapUserToDto(userRepository.save(user));
+        userRepository.save(user);
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
@@ -75,14 +75,12 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
-    public boolean updateUser(UserDto userDto) {
+    public void updateUser(UserDto userDto) {
         userRepository.update(userDto.getName(), userDto.getEmail(), userDto.getBirthdate(), userDto.getUserId());
-        return true;
     }
 
-    public boolean removeUser(Integer userId) {
+    public void removeUser(Integer userId) {
         userRepository.deleteById(userId);
-        return true;
     }
 
     public Collection<UserDto> getAll() {

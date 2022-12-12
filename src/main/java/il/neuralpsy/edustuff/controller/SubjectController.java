@@ -35,7 +35,8 @@ public class SubjectController {
 
 
     @DeleteMapping("/{subjectId}")
-    public boolean removeSubject(@PathVariable Integer subjectId){
-        return subjectService.removeSubject(subjectId);
+    public Integer removeSubject(@PathVariable Integer subjectId){
+        subjectService.removeSubject(subjectId);
+        return subjectId;
     }
 }

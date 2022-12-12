@@ -4,6 +4,7 @@ import il.neuralpsy.edustuff.dto.TaskDto;
 import il.neuralpsy.edustuff.event.AllowedFeedEvents;
 import il.neuralpsy.edustuff.event.EventType;
 import il.neuralpsy.edustuff.event.FeedEvent;
+import il.neuralpsy.edustuff.exception.UserDoesntExistException;
 import il.neuralpsy.edustuff.model.User;
 import il.neuralpsy.edustuff.repository.UserRepository;
 import il.neuralpsy.edustuff.service.TaskService;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
-@SuppressWarnings("SpellCheckingInspection")
+@SuppressWarnings({"SpellCheckingInspection", "SameReturnValue"})
 @Controller
 @RequestMapping("/task")
 @Slf4j
@@ -63,11 +64,15 @@ public class TaskController {
         return "redirect:/createtask?success";
     }
 
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @PostMapping("/{taskId}/student/{studentId}")
     public String takeTask(@PathVariable Integer taskId, @PathVariable Integer studentId){
+        User student;
 
-        User student = userRepository.findById(studentId).get();
+         if (userRepository.findById(studentId).isPresent()){
+             student = userRepository.findById(studentId).get();
+         } else {
+             throw new UserDoesntExistException("Returned data is null or user doesnt exist");
+         }
 
         taskService.setUserForTask(taskId, student);
 
@@ -83,14 +88,14 @@ public class TaskController {
         return "redirect:/tasks?success";
     }
 
+    @SuppressWarnings("SameReturnValue")
     @GetMapping("/{taskId}")
     public String getTaskInfo(@PathVariable Integer taskId){
-        log.info("You are in Task Controller getting task info");
 
         return "tasktempl";
     }
 
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
+    @SuppressWarnings({"OptionalGetWithoutIsPresent", "SameReturnValue"})
     @DeleteMapping("/makedone/{taskId}/user/{userId}")
     public String removeTask(@PathVariable Integer taskId, @PathVariable Integer userId){
         taskService.removeTask(taskId);

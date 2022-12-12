@@ -1,5 +1,6 @@
 package il.neuralpsy.edustuff.errors;
 
+@SuppressWarnings("unused")
 public class ErrorResponse {
     private final String error;
 

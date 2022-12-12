@@ -42,12 +42,11 @@ public class SubjectService {
     }
 
 
-    public boolean removeSubject(Integer subjectId) {
+    public void removeSubject(Integer subjectId) {
         try {
             subjectRepository.deleteById(subjectId);
         } catch (EmptyResultDataAccessException e) {
             throw new SubjectDoesntExistException("There is no subject with ID " + subjectId);
         }
-        return true;
     }
 }

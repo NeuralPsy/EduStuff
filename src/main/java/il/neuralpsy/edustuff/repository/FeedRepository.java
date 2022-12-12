@@ -11,7 +11,5 @@ public interface FeedRepository extends JpaRepository<FeedEvent, Integer> {
 
     Collection<FeedEvent> findAllByUser_UserId(Integer userId);
 
-    Collection<FeedEvent> findAllByUserUserType_Name(String userType);
-
 
 }
