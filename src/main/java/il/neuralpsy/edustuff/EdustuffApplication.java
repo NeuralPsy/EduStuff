@@ -2,14 +2,11 @@ package il.neuralpsy.edustuff;
 
 import il.neuralpsy.edustuff.model.Subject;
 import il.neuralpsy.edustuff.model.TaskStatus;
-import il.neuralpsy.edustuff.model.User;
 import il.neuralpsy.edustuff.model.UserType;
 import il.neuralpsy.edustuff.repository.SubjectRepository;
 import il.neuralpsy.edustuff.repository.TaskStatusRepository;
-import il.neuralpsy.edustuff.repository.UserRepository;
 import il.neuralpsy.edustuff.repository.UserTypeRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

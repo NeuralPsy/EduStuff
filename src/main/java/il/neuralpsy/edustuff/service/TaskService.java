@@ -1,6 +1,5 @@
 package il.neuralpsy.edustuff.service;
 
-import il.neuralpsy.edustuff.dto.SubjectDto;
 import il.neuralpsy.edustuff.dto.TaskDto;
 import il.neuralpsy.edustuff.exception.TaskDoesntExistException;
 import il.neuralpsy.edustuff.exception.UserDoesntExistException;
@@ -12,17 +11,12 @@ import il.neuralpsy.edustuff.repository.SubjectRepository;
 import il.neuralpsy.edustuff.repository.TaskRepository;
 import il.neuralpsy.edustuff.repository.TaskStatusRepository;
 import il.neuralpsy.edustuff.repository.UserRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component

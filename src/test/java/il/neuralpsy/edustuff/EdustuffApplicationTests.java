@@ -10,8 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
 @SpringBootTest
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 class EdustuffApplicationTests {
@@ -22,24 +20,6 @@ class EdustuffApplicationTests {
 	@Autowired
 	private final ModelMapper modelMapper;
 
-
-
-//	@Test
-//	void shouldAddUser() {
-//		User maria = createUser1();
-//		int userId = userController.addUser(maria).getUserId();
-//		UserDto userFromDB = modelMapper.map(userController.getUserById(userId), UserDto.class);
-//		assertThat(userFromDB.getUserId()).isEqualTo(userId);
-//		assertThat(userFromDB.getName()).isEqualTo("Maria");
-//		assertThat(userFromDB.getBirthdate()).isEqualTo("1990-02-03");
-//	}
-
-//	@Test
-//	void shouldFindUserByEmail() {
-//		User professor = createUser2();
-//		User userFromDB = userController.addUser(professor);
-//		assertThat(userFromDB.getEmail()).isEqualTo(professor.getEmail());
-//	}
 
 	private User createUser1() {
 		User user = new User();

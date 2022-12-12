@@ -1,7 +1,5 @@
 package il.neuralpsy.edustuff.dto;
 
-import il.neuralpsy.edustuff.model.TaskStatus;
-import il.neuralpsy.edustuff.model.User;
 import lombok.Data;
 
 import java.time.LocalDateTime;

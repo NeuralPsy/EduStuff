@@ -3,7 +3,6 @@ package il.neuralpsy.edustuff.service;
 import il.neuralpsy.edustuff.dto.UserDto;
 import il.neuralpsy.edustuff.dto.UserRegistrationDto;
 import il.neuralpsy.edustuff.exception.UserDoesntExistException;
-import il.neuralpsy.edustuff.exception.UserEmailDoesntExistException;
 import il.neuralpsy.edustuff.model.User;
 import il.neuralpsy.edustuff.model.UserType;
 import il.neuralpsy.edustuff.repository.UserRepository;
@@ -26,16 +25,14 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    private PasswordEncoder passwordEncoder;
-    private UserTypeRepository userTypeRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final UserTypeRepository userTypeRepository;
 
-    private final ModelMapper modelMapper;
 
     @Autowired
     public UserService(UserRepository userRepository, ModelMapper modelMapper,
                        PasswordEncoder passwordEncoder, UserTypeRepository userTypeRepository){
         this.userRepository = userRepository;
-        this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
         this.userTypeRepository = userTypeRepository;
 
@@ -69,10 +66,6 @@ public class UserService {
     }
 
     public UserDto findUserByEmail(String email) {
-//        log.info("Checking availability of email: ");
-//        boolean doesExist = userRepository.existsByEmail(email);
-//        log.info("      "+ !doesExist);
-//        if (doesExist) throw new UserEmailDoesntExistException("There is no user with email "+email+" or a typo was done");
         return mapUserToDto(userRepository.findUserByEmail(email).get());
     }
 

@@ -1,7 +1,5 @@
 package il.neuralpsy.edustuff.controller;
 
-import il.neuralpsy.edustuff.dto.CommentDto;
-import il.neuralpsy.edustuff.dto.UserDto;
 import il.neuralpsy.edustuff.event.AllowedFeedEvents;
 import il.neuralpsy.edustuff.event.EventType;
 import il.neuralpsy.edustuff.event.FeedEvent;
@@ -15,21 +13,17 @@ import il.neuralpsy.edustuff.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
 
 @Controller
 @RequestMapping("/comment")
 @Slf4j
 public class CommentController {
     private final CommentService commentService;
-    private final UserService userService;
 
     private final UserRepository userRepository;
 
@@ -40,10 +34,9 @@ public class CommentController {
 
     @Autowired
     public CommentController(CommentService commentService, ApplicationEventPublisher eventPublisher,
-                             UserService userService, UserRepository userRepository, TaskRepository taskRepository){
+                             UserRepository userRepository, TaskRepository taskRepository){
         this.commentService = commentService;
         this.eventPublisher = eventPublisher;
-        this.userService = userService;
         this.userRepository = userRepository;
         this.taskRepository = taskRepository;
     }

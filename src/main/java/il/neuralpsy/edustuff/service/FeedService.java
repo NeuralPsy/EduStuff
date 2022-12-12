@@ -15,15 +15,11 @@ import java.util.stream.Collectors;
 @Service
 public class FeedService {
 
-    private final UserRepository userRepository;
     private final FeedRepository feedRepository;
-    private final ModelMapper modelMapper;
 
     @Autowired
-    public FeedService(UserRepository userRepository, FeedRepository feedRepository, ModelMapper modelMapper){
-        this.userRepository = userRepository;
+    public FeedService(FeedRepository feedRepository){
         this.feedRepository = feedRepository;
-        this.modelMapper = modelMapper;
     }
 
     public Collection<FeedEventDto> getUserFeed(final Integer userId) {

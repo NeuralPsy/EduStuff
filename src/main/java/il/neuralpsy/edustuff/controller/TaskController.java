@@ -1,13 +1,9 @@
 package il.neuralpsy.edustuff.controller;
 
-import il.neuralpsy.edustuff.dto.CommentDto;
 import il.neuralpsy.edustuff.dto.TaskDto;
-import il.neuralpsy.edustuff.dto.UserDto;
 import il.neuralpsy.edustuff.event.AllowedFeedEvents;
 import il.neuralpsy.edustuff.event.EventType;
 import il.neuralpsy.edustuff.event.FeedEvent;
-import il.neuralpsy.edustuff.model.Task;
-import il.neuralpsy.edustuff.model.TaskStatus;
 import il.neuralpsy.edustuff.model.User;
 import il.neuralpsy.edustuff.repository.UserRepository;
 import il.neuralpsy.edustuff.service.TaskService;
@@ -18,11 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Collection;
 
 @Controller
 @RequestMapping("/task")
@@ -89,7 +82,7 @@ public class TaskController {
     }
 
     @GetMapping("/{taskId}")
-    public String getTaskInfo(Model model){
+    public String getTaskInfo(@PathVariable Integer taskId){
         log.info("You are in Task Controller getting task info");
 
         return "tasktempl";

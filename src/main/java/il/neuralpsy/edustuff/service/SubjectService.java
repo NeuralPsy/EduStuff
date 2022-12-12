@@ -3,7 +3,6 @@ package il.neuralpsy.edustuff.service;
 import il.neuralpsy.edustuff.dto.SubjectDto;
 import il.neuralpsy.edustuff.exception.SubjectDoesntExistException;
 import il.neuralpsy.edustuff.model.Subject;
-import il.neuralpsy.edustuff.model.User;
 import il.neuralpsy.edustuff.repository.SubjectRepository;
 import il.neuralpsy.edustuff.repository.UserRepository;
 import org.modelmapper.ModelMapper;
@@ -12,8 +11,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -21,14 +18,12 @@ public class SubjectService {
 
     private final SubjectRepository subjectRepository;
 
-    private final UserRepository userRepository;
 
     private final ModelMapper modelMapper;
 
     @Autowired
-    public SubjectService(SubjectRepository subjectRepository, UserRepository userRepository, ModelMapper modelMapper) {
+    public SubjectService(SubjectRepository subjectRepository, ModelMapper modelMapper) {
         this.subjectRepository = subjectRepository;
-        this.userRepository = userRepository;
         this.modelMapper = modelMapper;
     }
 

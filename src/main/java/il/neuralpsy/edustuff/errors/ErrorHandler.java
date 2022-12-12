@@ -1,7 +1,6 @@
 package il.neuralpsy.edustuff.errors;
 
 import il.neuralpsy.edustuff.exception.*;
-import jakarta.validation.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -27,11 +26,5 @@ public class ErrorHandler {
     public ErrorResponse handleNotFound(final RuntimeException e){
         return new ErrorResponse(e.getMessage());
     }
-
-//    @ExceptionHandler
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-//    public ErrorResponse handleOtherExceptions(final Throwable e){
-//        return new ErrorResponse(e.getMessage());
-//    }
 
 }

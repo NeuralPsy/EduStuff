@@ -1,10 +1,6 @@
 package il.neuralpsy.edustuff.controller;
 
 import il.neuralpsy.edustuff.dto.CommentDto;
-import il.neuralpsy.edustuff.event.AllowedFeedEvents;
-import il.neuralpsy.edustuff.event.EventType;
-import il.neuralpsy.edustuff.event.FeedEvent;
-import il.neuralpsy.edustuff.model.Comment;
 import il.neuralpsy.edustuff.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -17,13 +13,10 @@ import java.util.Collection;
 public class CommentRestController {
     private final CommentService commentService;
 
-    private final ApplicationEventPublisher eventPublisher;
-
 
     @Autowired
-    public CommentRestController(CommentService commentService, ApplicationEventPublisher eventPublisher){
+    public CommentRestController(CommentService commentService){
         this.commentService = commentService;
-        this.eventPublisher = eventPublisher;
     }
 
     @GetMapping
