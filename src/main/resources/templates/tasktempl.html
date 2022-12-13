@@ -55,9 +55,9 @@
                 );
             </script>
             <h3 class="fs-3 font-weight-normal">Available actions</h3>
-            <a type="button" class="btn btn-secondary" th:href="@{/index}">Go to main page</a>
-            <a type="button" class="btn btn-secondary" th:href="@{/createtask}">Create a task</a>
-            <a type="button" class="btn btn-secondary" th:href="@{/tasks}">Check all the task</a>
+            <p><a type="button" class="btn btn-secondary" th:href="@{/createtask}">Create a task</a></p>
+            <p><a type="button" class="btn btn-secondary" th:href="@{/tasks}">Check all the tasks</a></p>
+            <p><a type="button" class="btn btn-secondary" th:href="@{/index}">Go to main page</a></p>
 
         </div>
         <div class="col-sm-7 col-lg-8">
@@ -102,6 +102,12 @@
                                     "<p >" + taskInfo.subject + "</p>" +
                                     "<p >" + taskInfo.content + "</p>"+
                                     "<p >" + taskInfo.status + "</p>");
+                            if (role === "teacher"){
+                                $("#taskInfo").append("<button type='button' " +
+                                                        "class='btn btn-primary' " +
+                                                        "onclick='makeTaskDone("+userId+")'>Good! / Delete task</button>");
+
+                            }
 
 
 
@@ -118,10 +124,7 @@
                                             "required type='text' " +
                                             "placeholder='Put text here'/>" +
                                     "<button type='submit' class='btn btn-primary'>Post</button></form>");
-                            if (role === "teacher"){
-                                $("#taskInfo").append("<button type='button' onclick='makeTaskDone("+userId+")'>Good!</button>");
 
-                            }
 
                             $.getJSON("/api/comment/task/"+taskId, function(comments){
                                 $.each(comments, function (key, com){

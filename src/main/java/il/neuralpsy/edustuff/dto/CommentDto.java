@@ -17,6 +17,6 @@ public class CommentDto implements Comparable<CommentDto>{
 
     @Override
     public int compareTo(CommentDto o) {
-        return this.timestamp.compareTo(o.timestamp);
+        return o.timestamp.compareTo(this.timestamp);
     }
 }

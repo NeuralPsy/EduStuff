@@ -34,10 +34,10 @@ public class AuthController {
         return "tasks";
     }
 
-    @GetMapping("/feed")
-    public String feed(){
-        return "feed";
-    }
+//    @GetMapping("/feed")
+//    public String feed(){
+//        return "feed";
+//    }
 
     @GetMapping("/createtask")
     public String createTask(Model model){

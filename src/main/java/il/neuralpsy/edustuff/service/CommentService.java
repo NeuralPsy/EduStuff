@@ -27,9 +27,10 @@ public class CommentService {
     }
 
     public Collection<CommentDto> getAll() {
-        return commentRepository.findAll().stream().map(
-                        this::mapToDto)
-                .collect(Collectors.toSet());
+        return commentRepository.findAll().stream()
+                .map(this::mapToDto)
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     public CommentDto addComment(Comment comment) {
@@ -49,14 +50,16 @@ public class CommentService {
         return commentRepository.findAllByTask_TaskId(taskId)
                 .stream()
                 .map(comment -> modelMapper.map(comment, CommentDto.class))
-                .collect(Collectors.toSet());
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     public Collection<CommentDto> getCommentsByUserId(Integer userId) {
         return commentRepository.findAllByUser_UserId(userId)
                 .stream()
                 .map(comment -> modelMapper.map(comment, CommentDto.class))
-                .collect(Collectors.toSet());
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     public CommentDto mapToDto(Comment comment){
