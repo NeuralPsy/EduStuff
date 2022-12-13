@@ -34,10 +34,6 @@ public class AuthController {
         return "tasks";
     }
 
-//    @GetMapping("/feed")
-//    public String feed(){
-//        return "feed";
-//    }
 
     @GetMapping("/createtask")
     public String createTask(Model model){
@@ -57,7 +53,6 @@ public class AuthController {
     public String registration(@ModelAttribute("user") UserRegistrationDto userRegistrationDto,
                                BindingResult result,
                                Model model){
-        log.info("Trying to save user: ");
         boolean doesExist = userService.checkEmailExistence(userRegistrationDto.getEmail());
 
         if(doesExist){

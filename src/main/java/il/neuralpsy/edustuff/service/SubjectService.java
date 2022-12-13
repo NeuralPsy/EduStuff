@@ -1,7 +1,7 @@
 package il.neuralpsy.edustuff.service;
 
 import il.neuralpsy.edustuff.dto.SubjectDto;
-import il.neuralpsy.edustuff.exception.SubjectDoesntExistException;
+import il.neuralpsy.edustuff.exception.NotFoundException;
 import il.neuralpsy.edustuff.model.Subject;
 import il.neuralpsy.edustuff.repository.SubjectRepository;
 import org.modelmapper.ModelMapper;
@@ -46,7 +46,7 @@ public class SubjectService {
         try {
             subjectRepository.deleteById(subjectId);
         } catch (EmptyResultDataAccessException e) {
-            throw new SubjectDoesntExistException("There is no subject with ID " + subjectId);
+            throw new NotFoundException("There is no subject with ID " + subjectId);
         }
     }
 }

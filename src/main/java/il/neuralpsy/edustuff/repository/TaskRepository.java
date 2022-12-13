@@ -16,7 +16,6 @@ import java.util.Collection;
 @Component
 public interface TaskRepository extends JpaRepository<Task, Integer> {
 
-//    @Query(value = "select * from Task where user_id = ?1", nativeQuery = true)
     Collection<Task> findTasksByUser_UserId(Integer userId);
 
     @Transactional

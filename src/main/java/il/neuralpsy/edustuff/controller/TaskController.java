@@ -4,7 +4,7 @@ import il.neuralpsy.edustuff.dto.TaskDto;
 import il.neuralpsy.edustuff.event.AllowedFeedEvents;
 import il.neuralpsy.edustuff.event.EventType;
 import il.neuralpsy.edustuff.event.FeedEvent;
-import il.neuralpsy.edustuff.exception.UserDoesntExistException;
+import il.neuralpsy.edustuff.exception.NotFoundException;
 import il.neuralpsy.edustuff.model.User;
 import il.neuralpsy.edustuff.repository.UserRepository;
 import il.neuralpsy.edustuff.service.TaskService;
@@ -37,13 +37,16 @@ public class TaskController {
 
     }
 
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @PostMapping("/create")
     public String createTask(@ModelAttribute("task") TaskDto taskDto,
                              @RequestParam String teacherId, BindingResult bindingResult){
 
         if (bindingResult.hasErrors()) {
             return "createtask";
+        }
+
+        if (userRepository.findUserByEmail(teacherId).isEmpty()){
+            throw new NotFoundException("User with ID "+teacherId+" doesn't exist");
         }
 
         User teacher = userRepository.findUserByEmail(teacherId).get();
@@ -71,7 +74,7 @@ public class TaskController {
          if (userRepository.findById(studentId).isPresent()){
              student = userRepository.findById(studentId).get();
          } else {
-             throw new UserDoesntExistException("Returned data is null or user doesnt exist");
+             throw new NotFoundException("Returned data is null or user doesnt exist");
          }
 
         taskService.setUserForTask(taskId, student);
@@ -95,10 +98,13 @@ public class TaskController {
         return "tasktempl";
     }
 
-    @SuppressWarnings({"OptionalGetWithoutIsPresent", "SameReturnValue"})
     @DeleteMapping("/makedone/{taskId}/user/{userId}")
     public String removeTask(@PathVariable Integer taskId, @PathVariable Integer userId){
         taskService.removeTask(taskId);
+
+        if (userRepository.findById(userId).isEmpty()){
+            throw new NotFoundException("User with ID "+userId+" doesn't exist");
+        }
 
         User user = userRepository.findById(userId).get();
 

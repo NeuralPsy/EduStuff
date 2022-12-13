@@ -1,9 +1,7 @@
 package il.neuralpsy.edustuff.service;
 
 import il.neuralpsy.edustuff.dto.TaskDto;
-import il.neuralpsy.edustuff.exception.TaskDoesntExistException;
-import il.neuralpsy.edustuff.exception.TaskStatusIsNotFoundException;
-import il.neuralpsy.edustuff.exception.UserDoesntExistException;
+import il.neuralpsy.edustuff.exception.NotFoundException;
 import il.neuralpsy.edustuff.model.Subject;
 import il.neuralpsy.edustuff.model.Task;
 import il.neuralpsy.edustuff.model.TaskStatus;
@@ -13,7 +11,6 @@ import il.neuralpsy.edustuff.repository.TaskRepository;
 import il.neuralpsy.edustuff.repository.TaskStatusRepository;
 import il.neuralpsy.edustuff.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -48,24 +45,24 @@ public class TaskService {
     }
 
     public Collection<TaskDto> getAll() {
-        return taskRepository.findAll().stream().map(this::mapTaskToDto)
+        return taskRepository.findAll()
+                .stream()
+                .map(this::mapTaskToDto)
                 .collect(Collectors.toSet());
     }
 
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
     public TaskDto getTaskById(Integer taskId) {
         TaskDto taskDto;
-        try {
-            taskDto = mapTaskToDto(taskRepository.findById(taskId).get());
-        } catch (EmptyResultDataAccessException e){
-            throw new TaskDoesntExistException("There's no task with ID "+taskId);
+        if (taskRepository.findById(taskId).isEmpty()){
+            throw new NotFoundException("There's no task with ID "+taskId);
         }
+        taskDto = mapTaskToDto(taskRepository.findById(taskId).get());
         return taskDto;
     }
 
     public Collection<TaskDto> getTasksByUserId(Integer userId) {
         boolean isValid = userRepository.existsById(userId);
-        if (!isValid) throw new UserDoesntExistException("There's no user with ID "+userId);
+        if (!isValid) throw new NotFoundException("There's no user with ID "+userId);
         return taskRepository.findTasksByUser_UserId(userId)
                 .stream()
                 .map(this::mapTaskToDto)
@@ -79,7 +76,7 @@ public class TaskService {
 
     public void removeTask(Integer taskId) {
         if (!taskRepository.existsById(taskId))
-            throw new TaskDoesntExistException("There's no task with ID "+taskId);
+            throw new NotFoundException("There's no task with ID "+taskId);
         taskRepository.deleteById(taskId);
     }
 
@@ -90,7 +87,7 @@ public class TaskService {
         if (statusRepository.findById(1).isPresent()){
             status = statusRepository.findById(1).get();
         } else {
-            throw new TaskStatusIsNotFoundException("Task status is not found id database");
+            throw new NotFoundException("Task status is not found id database");
         }
         taskRepository.setTaskStatus(status, timestamp, taskId);
     }

@@ -2,7 +2,7 @@ package il.neuralpsy.edustuff.service;
 
 import il.neuralpsy.edustuff.dto.UserDto;
 import il.neuralpsy.edustuff.dto.UserRegistrationDto;
-import il.neuralpsy.edustuff.exception.UserDoesntExistException;
+import il.neuralpsy.edustuff.exception.NotFoundException;
 import il.neuralpsy.edustuff.model.User;
 import il.neuralpsy.edustuff.model.UserType;
 import il.neuralpsy.edustuff.repository.UserRepository;
@@ -39,20 +39,14 @@ public class UserService {
     }
 
     public void addUser(UserRegistrationDto userRegistrationDto) {
-        log.info("Adding new user");
         User user = new User();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate birthdate = LocalDate.parse(userRegistrationDto.getBirthdate(), formatter);
         UserType userType = userTypeRepository.findByName(userRegistrationDto.getUserType());
-        log.info("Setting name");
         user.setName(userRegistrationDto.getName());
-        log.info("Setting email");
         user.setEmail(userRegistrationDto.getEmail());
-        log.info("Setting user type");
         user.setUserType(userType);
-        log.info("Setting birthdate");
         user.setBirthdate(birthdate);
-        log.info("Setting password");
         user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
         userRepository.save(user);
     }
@@ -62,12 +56,14 @@ public class UserService {
         try {
             return mapUserToDto(userRepository.findById(userId).get());
         } catch (NoSuchElementException e){
-            throw new UserDoesntExistException("There is no user with ID "+userId);
+            throw new NotFoundException("There is no user with ID "+userId);
         }
     }
 
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
     public UserDto findUserByEmail(String email) {
+        if (userRepository.findUserByEmail(email).isEmpty()) {
+            throw new NotFoundException("User with email " + email + " doesn't exist");
+        }
         return mapUserToDto(userRepository.findUserByEmail(email).get());
     }
 
@@ -84,12 +80,16 @@ public class UserService {
     }
 
     public Collection<UserDto> getAll() {
-        return userRepository.findAll().stream().map(this::mapUserToDto)
+        return userRepository.findAll()
+                .stream()
+                .map(this::mapUserToDto)
                 .collect(Collectors.toList());
     }
 
     public Collection<UserDto> getAllByUserType(Integer userTypeId) {
-        return userRepository.findAllByUserType_UserTypeId(userTypeId).stream().map(this::mapUserToDto)
+        return userRepository.findAllByUserType_UserTypeId(userTypeId)
+                .stream()
+                .map(this::mapUserToDto)
                 .collect(Collectors.toList());
     }
 

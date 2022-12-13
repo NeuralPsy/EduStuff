@@ -44,7 +44,7 @@
             <p class="fs-5">Birthdate: <span id="birthdate"></span></p>
             <p class="fs-5">E-mail: <span id="email"></span></p>
             <script th:inline="javascript">
-                var userEmail = [[${#authentication.name}]];
+                const userEmail = [[${#authentication.name}]];
                 $.getJSON("/user/email?email=" + userEmail, function (userInfo) {
                         document.getElementById("userId").innerText = userInfo.userId;
                         document.getElementById("name").innerText = userInfo.name;
@@ -70,8 +70,8 @@
             <div  id="taskInfo" class="form-group mb-3">
                 <script th:inline="javascript">
 
-                    var url = window.location.href;
-                    var taskId = url.split("/")[4];
+                    let url = window.location.href;
+                    let taskId = url.split("/")[4];
 
                     function makeTaskDone(userId){
                         $.ajax({
@@ -86,10 +86,9 @@
 
 
 
-                    var userEmail = [[${#authentication.name}]];
                     $.getJSON("/user/email?email=" + userEmail, function (userInfo) {
-                        var userId = userInfo.userId;
-                        var role = userInfo.userType.name.toLowerCase();
+                        let userId = userInfo.userId;
+                        let role = userInfo.userType.name.toLowerCase();
 
 
 
@@ -130,7 +129,7 @@
                                 $.each(comments, function (key, com){
                                     JSON.stringify(com);
 
-                                    var date = Date.parse(com.timestamp);
+                                    let date = Date.parse(com.timestamp);
                                     date = new Date(date);
 
                                     $("#taskInfo").append("<div class='card overflow-auto'>" +

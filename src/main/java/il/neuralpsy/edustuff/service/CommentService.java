@@ -2,7 +2,7 @@ package il.neuralpsy.edustuff.service;
 
 import il.neuralpsy.edustuff.dto.CommentDto;
 import il.neuralpsy.edustuff.dto.UserDto;
-import il.neuralpsy.edustuff.exception.CommentDoesntExistException;
+import il.neuralpsy.edustuff.exception.NotFoundException;
 import il.neuralpsy.edustuff.model.Comment;
 import il.neuralpsy.edustuff.repository.CommentRepository;
 import org.modelmapper.ModelMapper;
@@ -27,7 +27,8 @@ public class CommentService {
     }
 
     public Collection<CommentDto> getAll() {
-        return commentRepository.findAll().stream()
+        return commentRepository.findAll()
+                .stream()
                 .map(this::mapToDto)
                 .sorted()
                 .collect(Collectors.toList());
@@ -41,7 +42,7 @@ public class CommentService {
         try {
             commentRepository.deleteById(commentId);
         } catch (EmptyResultDataAccessException e){
-            throw new CommentDoesntExistException("There is no comment with ID " + commentId);
+            throw new NotFoundException("There is no comment with ID " + commentId);
         }
     }
 

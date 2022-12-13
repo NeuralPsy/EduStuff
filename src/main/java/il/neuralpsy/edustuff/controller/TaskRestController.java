@@ -4,6 +4,7 @@ import il.neuralpsy.edustuff.dto.TaskDto;
 import il.neuralpsy.edustuff.event.AllowedFeedEvents;
 import il.neuralpsy.edustuff.event.EventType;
 import il.neuralpsy.edustuff.event.FeedEvent;
+import il.neuralpsy.edustuff.exception.NotFoundException;
 import il.neuralpsy.edustuff.model.User;
 import il.neuralpsy.edustuff.repository.UserRepository;
 import il.neuralpsy.edustuff.service.TaskService;
@@ -53,9 +54,12 @@ public class TaskRestController {
 
 
 
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @PutMapping("/update/{updatorId}")
     public Integer updateTask(@RequestBody TaskDto taskDto, @PathVariable Integer updatorId){
+
+        if (userRepository.findById(updatorId).isEmpty()) {
+            throw new NotFoundException("User with ID "+updatorId+" doesn't exist");
+        }
 
         User user = userRepository.findById(updatorId).get();
 
