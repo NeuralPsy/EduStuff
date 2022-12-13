@@ -21,17 +21,17 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/register/**").permitAll()
+                    .authorizeHttpRequests()
+                    .requestMatchers("/register/**").permitAll()
                 .and()
-                .authorizeHttpRequests()
-                .requestMatchers("/register").permitAll()
+                    .authorizeHttpRequests()
+                    .requestMatchers("/register").permitAll()
                 .and()
-                .authorizeHttpRequests()
-                .requestMatchers("/login").permitAll()
-                .anyRequest().authenticated()
+                    .authorizeHttpRequests()
+                    .requestMatchers("/login").permitAll()
+                    .anyRequest().authenticated()
                 .and()
-                .formLogin(
+                    .formLogin(
                         form -> form
                                 .loginPage("/login")
                                 .loginProcessingUrl("/login")
