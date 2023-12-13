@@ -74,7 +74,7 @@ public class TaskController {
          if (userRepository.findById(studentId).isPresent()){
              student = userRepository.findById(studentId).get();
          } else {
-             throw new NotFoundException("Returned data is null or user doesnt exist");
+             throw new NotFoundException("Returned data is null or user does not exist");
          }
 
         taskService.setUserForTask(taskId, student);
